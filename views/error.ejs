@@ -1,0 +1,62 @@
+<div class="error-page">
+  <div class="error-content">
+    <!-- 错误类型图标 -->
+    <div class="error-icon-wrapper">
+      <% if (errorType === 'not_found') { %>
+        <div class="error-icon">&#128269;</div>
+      <% } else if (errorType === 'network_error') { %>
+        <div class="error-icon">&#127760;</div>
+      <% } else if (errorType === 'timeout') { %>
+        <div class="error-icon">&#9200;</div>
+      <% } else if (errorType === 'rate_limited') { %>
+        <div class="error-icon">&#9889;</div>
+      <% } else if (errorType === 'unauthorized' || errorType === 'forbidden') { %>
+        <div class="error-icon">&#128274;</div>
+      <% } else { %>
+        <div class="error-icon">&#9888;</div>
+      <% } %>
+    </div>
+
+    <!-- 错误状态码 -->
+    <div class="error-code"><%= status || 500 %></div>
+
+    <!-- 错误标题 -->
+    <h1 class="error-title"><%= message || '服务器内部错误' %></h1>
+
+    <!-- 根据错误类型显示不同提示 -->
+    <p class="error-desc">
+      <% if (errorType === 'not_found') { %>
+        您访问的页面不存在或已被删除，请检查链接是否正确
+      <% } else if (errorType === 'network_error') { %>
+        无法连接到服务器，请检查您的网络连接或稍后重试
+      <% } else if (errorType === 'timeout') { %>
+        请求处理超时，服务可能暂时繁忙，请稍后重试
+      <% } else if (errorType === 'rate_limited') { %>
+        您的操作过于频繁，请等待片刻后再试
+      <% } else if (errorType === 'bad_request') { %>
+        请求格式不正确，请检查输入内容后重试
+      <% } else { %>
+        服务器遇到了一些问题，我们正在努力修复中
+      <% } %>
+    </p>
+
+    <!-- 操作按钮组 -->
+    <div class="error-actions">
+      <button type="button" class="error-btn error-btn-back" onclick="if(window.history.length > 1){history.back();}else{window.location.href='/';}">
+        &#8592; 返回上一页
+      </button>
+      <a href="/" class="error-btn error-btn-home">返回首页</a>
+      <button type="button" class="error-btn error-btn-retry" onclick="location.reload()">
+        &#8635; 重试
+      </button>
+    </div>
+
+    <!-- 开发环境显示详细错误信息 -->
+    <% if (showStack && error && error.stack) { %>
+    <details class="error-details">
+      <summary>技术详细信息（仅开发环境可见）</summary>
+      <pre class="error-stack"><%= error.stack %></pre>
+    </details>
+    <% } %>
+  </div>
+</div>

@@ -1,0 +1,113 @@
+<div class="space-page">
+  <% if (user && user.mid) { %>
+  <section class="space-header">
+    <div class="space-banner" style="background: linear-gradient(135deg, #FB7299 0%, #e5658a 50%, #d9587b 100%);">
+      <div class="space-banner-overlay"></div>
+      <div class="space-profile">
+        <div class="space-avatar-wrapper">
+          <% var _faceUrl = (user.face || ''); if (_faceUrl.indexOf('//') === 0 && _faceUrl.indexOf('http') !== 0) { _faceUrl = 'https:' + _faceUrl; } %>
+          <img src="<%= _faceUrl ? '/image/proxy?url=' + encodeURIComponent(_faceUrl) : '' %>" alt="<%= user.uname || '' %>" class="space-avatar" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCI+PHJlY3QgZmlsbD0iI2VlZSIgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5OTkiIGZvbnQtc2l6ZT0iMTQiPuWbvueJhDwvdGV4dD48L3N2Zz4='">
+          <% if (user.level) { %>
+          <span class="space-level">Lv.<%= user.level %></span>
+          <% } %>
+        </div>
+        <div class="space-info">
+          <h1 class="space-name">
+            <%= user.uname || '用户' %>
+            <% if (user.vipStatus === 1) { %>
+            <span class="vip-badge-large">大会员</span>
+            <% } %>
+          </h1>
+          <% if (user.sign) { %>
+          <p class="space-sign"><%= stripHtmlTags(user.sign) %></p>
+          <% } %>
+          <div class="space-stats">
+            <% if (user.sex && user.sex !== '保密') { %>
+            <span class="stat-item"><%= user.sex %></span>
+            <span class="stat-divider">·</span>
+            <% } %>
+            <span class="stat-item">粉丝 <strong><%= formatCount(stat.follower || user.fans || 0) %></strong></span>
+            <span class="stat-divider">·</span>
+            <span class="stat-item">关注 <strong><%= formatCount(stat.following || user.friend || 0) %></strong></span>
+            <span class="stat-divider">·</span>
+            <span class="stat-item">投稿 <strong><%= formatCount(user.archive_count || videos.length) %></strong></span>
+          </div>
+        </div>
+      </div>
+      <div class="profile-actions">
+        <button class="btn-logout" onclick="handleLogout()">退出登录</button>
+      </div>
+    </div>
+  </section>
+
+  <nav class="space-tabs">
+    <button class="tab-btn active">投稿视频 <span class="tab-count"><%= videos.length %></span></button>
+  </nav>
+
+  <section class="space-videos">
+    <% if (videos.length > 0) { %>
+    <div class="video-grid">
+      <% videos.forEach(function(video) { %>
+      <% var _coverUrl = (video.pic || ''); if (_coverUrl.indexOf('//') === 0 && _coverUrl.indexOf('http') !== 0) { _coverUrl = 'https:' + _coverUrl; } %>
+      <a href="/video/<%= video.bvid %>" class="video-card">
+        <div class="card-cover">
+          <img src="<%= _coverUrl ? '/image/proxy?url=' + encodeURIComponent(_coverUrl) : '' %>" alt="<%= video.title %>" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIj48cmVjdCBmaWxsPSIjZWVlIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LXNpemU9IjE0Ij7nu6flg7o8L3RleHQ+PC9zdmc+'">
+          <span class="card-duration"><%= video.length || video.duration || '' %></span>
+        </div>
+        <div class="card-info">
+          <h3 class="card-title"><%= video.title %></h3>
+          <div class="card-meta">
+            <span><%= formatCount(video.play || 0) %> 播放</span>
+          </div>
+        </div>
+      </a>
+      <% }); %>
+    </div>
+    <% } else { %>
+    <div class="empty-state">
+      <span class="empty-icon-large">&#127916;</span>
+      <p class="empty-state-text">暂无投稿视频</p>
+    </div>
+    <% } %>
+  </section>
+  <% } else { %>
+  <div class="empty-state">
+    <span class="empty-icon-large">&#128533;</span>
+    <p class="empty-state-text">无法加载用户信息</p>
+    <a href="/auth/login" class="back-link">重新登录</a>
+  </div>
+  <% } %>
+</div>
+
+<script>
+function handleLogout() {
+  var overlay = document.createElement('div');
+  overlay.className = 'confirm-overlay';
+  overlay.innerHTML = '<div class="confirm-dialog">' +
+    '<div class="confirm-title">退出登录</div>' +
+    '<div class="confirm-message">确定要退出当前账号吗？</div>' +
+    '<div class="confirm-actions">' +
+    '<button class="confirm-btn confirm-cancel">取消</button>' +
+    '<button class="confirm-btn confirm-ok">确定退出</button>' +
+    '</div></div>';
+  document.body.appendChild(overlay);
+
+  overlay.querySelector('.confirm-cancel').onclick = function() {
+    document.body.removeChild(overlay);
+  };
+  overlay.querySelector('.confirm-ok').onclick = function() {
+    document.body.removeChild(overlay);
+    fetch('/auth/api/logout', { method: 'POST' })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        window.location.href = '/auth/login';
+      })
+      .catch(function() {
+        window.location.href = '/auth/login';
+      });
+  };
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) document.body.removeChild(overlay);
+  });
+}
+</script>

@@ -1,0 +1,69 @@
+<div class="page-ranking">
+  <!-- 刷新按钮 -->
+  <div class="ranking-header">
+    <button class="refresh-ranking-btn" onclick="location.reload()" title="刷新排行榜">
+      &#8635; 刷新榜单
+    </button>
+  </div>
+
+  <!-- 排行榜标签 -->
+  <div class="ranking-tabs ranking-tabs-animated">
+    <a href="/ranking?rid=0" class="ranking-tab <%= currentRid === '0' ? 'active' : '' %>">全站</a>
+    <a href="/ranking?rid=1" class="ranking-tab <%= currentRid === '1' ? 'active' : '' %>">动画</a>
+    <a href="/ranking?rid=3" class="ranking-tab <%= currentRid === '3' ? 'active' : '' %>">音乐</a>
+    <a href="/ranking?rid=129" class="ranking-tab <%= currentRid === '129' ? 'active' : '' %>">舞蹈</a>
+    <a href="/ranking?rid=4" class="ranking-tab <%= currentRid === '4' ? 'active' : '' %>">游戏</a>
+    <a href="/ranking?rid=36" class="ranking-tab <%= currentRid === '36' ? 'active' : '' %>">知识</a>
+    <a href="/ranking?rid=188" class="ranking-tab <%= currentRid === '188' ? 'active' : '' %>">科技</a>
+    <a href="/ranking?rid=234" class="ranking-tab <%= currentRid === '234' ? 'active' : '' %>">运动</a>
+    <a href="/ranking?rid=223" class="ranking-tab <%= currentRid === '223' ? 'active' : '' %>">汽车</a>
+    <a href="/ranking?rid=160" class="ranking-tab <%= currentRid === '160' ? 'active' : '' %>">生活</a>
+    <a href="/ranking?rid=138" class="ranking-tab <%= currentRid === '138' ? 'active' : '' %>">搞笑</a>
+    <a href="/ranking?rid=211" class="ranking-tab <%= currentRid === '211' ? 'active' : '' %>">美食</a>
+    <a href="/ranking?rid=217" class="ranking-tab <%= currentRid === '217' ? 'active' : '' %>">动物圈</a>
+    <a href="/ranking?rid=119" class="ranking-tab <%= currentRid === '119' ? 'active' : '' %>">鬼畜</a>
+    <a href="/ranking?rid=155" class="ranking-tab <%= currentRid === '155' ? 'active' : '' %>">时尚</a>
+    <a href="/ranking?rid=5" class="ranking-tab <%= currentRid === '5' ? 'active' : '' %>">娱乐</a>
+    <a href="/ranking?rid=181" class="ranking-tab <%= currentRid === '181' ? 'active' : '' %>">影视</a>
+  </div>
+
+  <!-- 排行榜列表 -->
+  <% if (rankingList && rankingList.length > 0) { %>
+  <div class="ranking-list">
+    <% rankingList.forEach(function(item, index) { %>
+    <a href="/video/<%= item.bvid %>" class="ranking-item<%= index < 3 ? ' ranking-top-' + (index + 1) : '' %>">
+      <div class="ranking-rank <%= index < 3 ? 'top-' + (index + 1) : 'normal' %>">
+        <%= (currentPage - 1) * 20 + index + 1 %>
+      </div>
+      <div class="ranking-cover">
+        <img
+          src="/image/proxy?url=<%= encodeURIComponent(item.pic) %>"
+          alt="<%= item.title %>"
+          onerror="this.src='/image/proxy?url=https://i0.hdslb.com/bfs/archive/dummy.jpg'"
+        >
+      </div>
+      <div class="ranking-info">
+        <h4 class="ranking-title"><%= item.title %></h4>
+        <div class="ranking-details">
+          <span><%= formatCount(item.stat && item.stat.view ? item.stat.view : 0) %> 播放</span>
+          <span><%= item.owner && item.owner.name ? item.owner.name : '未知UP主' %></span>
+        </div>
+      </div>
+    </a>
+    <% }); %>
+  </div>
+
+  <!-- 分页提示 -->
+  <% if (total === 100) { %>
+  <div class="pagination-hint">
+    <span class="page-info">显示前 100 名视频</span>
+  </div>
+  <% } %>
+  <% } else { %>
+  <div class="empty-state">
+    <div class="empty-state-icon">&#128196;</div>
+    <p class="empty-state-text">暂无排行榜数据</p>
+    <p class="empty-state-hint">请稍后再试或切换其他分区</p>
+  </div>
+  <% } %>
+</div>

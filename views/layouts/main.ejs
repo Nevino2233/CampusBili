@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle : 'CampusBili' %></title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="CampusBili - 校园哔哩哔哩，发现优质视频内容，探索精彩世界。热门视频、排行榜、动态一站式体验。">
+  <meta name="keywords" content="CampusBili,校园B站,视频,番剧,直播,动画,音乐,游戏,科技,生活,搞笑,bilibili">
+  <meta name="author" content="CampusBili">
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="<%= typeof pageTitle !== 'undefined' ? pageTitle : 'CampusBili' %>">
+  <meta property="og:description" content="CampusBili - 校园哔哩哔哩">
+  <meta property="og:site_name" content="CampusBili">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'><rect width='28' height='28' rx='6' fill='%23FB7299'/><path d='M8 10L14 7L20 10V18L14 21L8 18V10Z' fill='white' opacity='0.9'/><circle cx='14' cy='14' r='3' fill='%23FB7299'/></svg>">
+  <link rel="stylesheet" href="/css/style.css">
+  <% if (typeof stylesheets !== 'undefined') { %>
+    <% stylesheets.forEach(function(sheet) { %>
+      <link rel="stylesheet" href="<%= sheet %>">
+    <% }); %>
+  <% } %>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">跳过导航</a>
+
+  <!-- 顶部导航栏 -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-container">
+      <!-- Logo -->
+      <div class="logo">
+        <a href="/">
+          <svg class="logo-icon" width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <rect width="28" height="28" rx="6" fill="#FB7299"/>
+            <path d="M8 10L14 7L20 10V18L14 21L8 18V10Z" fill="white" opacity="0.9"/>
+            <circle cx="14" cy="14" r="3" fill="#FB7299"/>
+          </svg>
+          <span class="logo-text">CampusBili</span>
+        </a>
+      </div>
+
+      <!-- 主导航 -->
+      <nav class="main-nav" id="mainNav" role="navigation" aria-label="主导航">
+        <ul>
+          <li><a href="/" class="nav-link<%= typeof currentPath !== 'undefined' && currentPath === '/' ? ' active' : '' %>">首页</a></li>
+          <li><a href="/recommend" class="nav-link<%= typeof currentPath !== 'undefined' && currentPath.startsWith('/recommend') ? ' active' : '' %>">推荐</a></li>
+          <li><a href="/dynamic" class="nav-link<%= typeof currentPath !== 'undefined' && currentPath.startsWith('/dynamic') ? ' active' : '' %>">动态</a></li>
+          <li><a href="/ranking" class="nav-link<%= typeof currentPath !== 'undefined' && currentPath.startsWith('/ranking') ? ' active' : '' %>">排行</a></li>
+        </ul>
+      </nav>
+
+      <!-- 移动端菜单按钮 -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="打开菜单" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <!-- 移动端侧边导航 -->
+      <nav class="mobile-nav" id="mobileNav" aria-label="移动端导航">
+        <div class="mobile-nav-header">
+          <div class="mobile-nav-logo">
+            <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
+              <rect width="28" height="28" rx="6" fill="white"/>
+              <path d="M8 10L14 7L20 10V18L14 21L8 18V10Z" fill="#FB7299" opacity="0.9"/>
+              <circle cx="14" cy="14" r="3" fill="white"/>
+            </svg>
+            <span>CampusBili</span>
+          </div>
+        </div>
+        <div class="mobile-nav-body">
+          <a href="/" class="mobile-nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            首页
+          </a>
+          <a href="/recommend" class="mobile-nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            推荐
+          </a>
+          <a href="/dynamic" class="mobile-nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            动态
+          </a>
+          <a href="/ranking" class="mobile-nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            排行
+          </a>
+          <a href="/search" class="mobile-nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            搜索
+          </a>
+          <a href="/auth/profile" class="mobile-nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            个人中心
+          </a>
+        </div>
+      </nav>
+
+      <!-- 搜索框 -->
+      <div class="search-box" role="search">
+        <form action="/search" method="GET" id="searchForm">
+          <input type="text" name="keyword" placeholder="搜索视频、UP主" class="search-input" id="searchInput" autocomplete="off" aria-label="搜索关键词">
+          <button type="submit" class="search-btn" aria-label="搜索">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+            </svg>
+          </button>
+        </form>
+        <div id="searchSuggestions" class="search-suggestions" role="listbox" aria-label="搜索建议"></div>
+      </div>
+
+      <!-- 用户入口 -->
+      <div class="user-entry" id="userEntry">
+        <a href="/auth/profile" class="user-entry-link" id="userEntryLink">
+          <div class="user-avatar-mini" id="userAvatarMini">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <span class="user-name-mini" id="userNameMini">个人中心</span>
+          <svg class="user-dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4"/></svg>
+        </a>
+        <div class="user-dropdown" id="userDropdown">
+          <div class="user-dropdown-header" id="userDropdownHeader">
+            <div class="user-dropdown-avatar" id="userDropdownAvatar"></div>
+            <div class="user-dropdown-info">
+              <div class="user-dropdown-name" id="userDropdownName">未登录</div>
+              <div class="user-dropdown-level" id="userDropdownLevel"></div>
+            </div>
+          </div>
+          <div class="user-dropdown-divider"></div>
+          <a href="/auth/profile" class="user-dropdown-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            个人中心
+          </a>
+          <button class="user-dropdown-item" id="logoutBtn" style="display:none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            退出登录
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容区域 -->
+  <main class="main-content" id="main-content">
+    <div class="container">
+      <%- body %>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-links">
+        <a href="/">关于我们</a>
+        <span class="divider">|</span>
+        <a href="/">联系方式</a>
+        <span class="divider">|</span>
+        <a href="/">用户协议</a>
+        <span class="divider">|</span>
+        <a href="/">隐私政策</a>
+      </div>
+      <p class="copyright">&copy; <%= new Date().getFullYear() %> CampusBili - 校园哔哩哔哩</p>
+      <p class="disclaimer">本站为学习项目，仅供技术交流使用</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript 文件 -->
+  <script src="/js/app.js"></script>
+  <% if (typeof scripts !== 'undefined') { %>
+    <% scripts.forEach(function(script) { %>
+      <script src="<%= script %>"></script>
+    <% }); %>
+  <% } %>
+
+  <script>
+  (function(){
+    function loadUserInfo(){
+      fetch('/auth/api/user/info')
+        .then(function(r){return r.json();})
+        .then(function(res){
+          var avatarEl=document.getElementById('userAvatarMini');
+          var nameEl=document.getElementById('userNameMini');
+          var linkEl=document.getElementById('userEntryLink');
+          if(!avatarEl||!nameEl) return;
+          if(res.code===0&&res.data&&res.data.isLogin){
+            var u=res.data;
+            nameEl.textContent=u.uname||'个人中心';
+            if(u.face){
+              var f=u.face;
+              if(f.indexOf('//')===0&&f.indexOf('http')!==0) f='https:'+f;
+              avatarEl.innerHTML='<img src="/image/proxy?url='+encodeURIComponent(f)+'" alt="'+(u.uname||'')+'" class="avatar-img-mini" onerror="this.outerHTML=\'<svg width=\\\'20\\\' height=\\\'20\\\' viewBox=\\\'0 0 24 24\\\' fill=\\\'none\\\' stroke=\\\'currentColor\\\' stroke-width=\\\'2\\\'><path d=\\\'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\\\'/><circle cx=\\\'12\\\' cy=\\\'7\\\' r=\\\'4\\\'/></svg>\'">';
+            }
+            if(linkEl) linkEl.href='/auth/profile';
+          } else {
+            nameEl.textContent='登录';
+            if(linkEl) linkEl.href='/auth/login';
+          }
+        })
+        .catch(function(){});
+    }
+    if(document.readyState==='loading'){
+      document.addEventListener('DOMContentLoaded',loadUserInfo);
+    } else {
+      loadUserInfo();
+    }
+  })();
+  </script>
+
+  <!-- 全局页面加载遮罩层 -->
+  <div id="pageLoader" class="page-loader">
+    <div class="loader-spinner"></div>
+  </div>
+
+  <!-- 回到顶部按钮 -->
+  <button id="backToTop" class="back-to-top" title="返回顶部">↑</button>
+
+  <!-- Toast 通知容器 -->
+  <div id="toastContainer" class="toast-container"></div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<div class="page-index">
+  <!-- 热门推荐横幅 -->
+  <section class="banner-section banner-with-decoration">
+    <div class="banner-decoration"></div>
+    <h2>欢迎来到 CampusBili</h2>
+    <p>发现优质视频内容，探索精彩世界</p>
+    <p class="banner-subtitle">热门视频 · 实时更新</p>
+  </section>
+
+  <!-- 热门视频区域 -->
+  <% if (popularVideos && popularVideos.length > 0) { %>
+  <section class="popular-section">
+    <div class="section-header">
+      <h2 class="section-title">热门视频</h2>
+      <a href="/ranking" class="section-more">查看更多 &gt;</a>
+    </div>
+
+    <div class="video-grid">
+      <% popularVideos.forEach(function(video) { %>
+      <div class="video-card"
+           onclick="window.location.href='/video/<%= video.bvid %>'"
+           data-bvid="<%= video.bvid %>"
+           data-title="<%= video.title %>"
+           data-author="<%= video.owner && video.owner.name ? video.owner.name : '未知UP主' %>"
+           data-view="<%= video.stat && video.stat.view ? video.stat.view : 0 %>">
+        <div class="video-cover">
+          <img
+            src="/image/proxy?url=<%= encodeURIComponent(video.pic) %>"
+            alt="<%= video.title %>"
+            onerror="this.src='/image/proxy?url=https://i0.hdslb.com/bfs/archive/dummy.jpg'"
+          >
+          <div class="cover-overlay">
+            <span class="cover-stat">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M4.5 3.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm8-9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM4 4v8m8-7v6"/>
+              </svg>
+              <%= formatCount(video.stat && video.stat.view ? video.stat.view : 0) %>
+            </span>
+            <span class="cover-stat">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2.5 0a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-10a.5.5 0 0 0-.5-.5h-7z"/>
+              </svg>
+              <%= formatCount(video.stat && video.stat.danmaku ? video.stat.danmaku : 0) %>
+            </span>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3 class="video-title"><%= video.title %></h3>
+          <div class="video-meta">
+            <span class="video-author"><%= video.owner && video.owner.name ? video.owner.name : '未知UP主' %></span>
+            <div class="video-stats">
+              <span><%= formatCount(video.stat && video.stat.view ? video.stat.view : 0) %> 播放</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+  </section>
+  <% } else { %>
+  <!-- 骨架屏加载状态 -->
+  <div class="skeleton-loading-section">
+    <div class="section-header">
+      <div class="skeleton-title"></div>
+      <div class="skeleton-more"></div>
+    </div>
+    <div class="video-grid skeleton-grid">
+      <% for (var i = 0; i < 8; i++) { %>
+      <div class="video-card skeleton-card">
+        <div class="skeleton-cover"></div>
+        <div class="skeleton-info">
+          <div class="skeleton-line skeleton-line-long"></div>
+          <div class="skeleton-line skeleton-line-short"></div>
+        </div>
+      </div>
+      <% } %>
+    </div>
+    <p class="loading-hint">正在加载推荐内容...</p>
+  </div>
+  <% } %>
+</div>
