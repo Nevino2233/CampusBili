@@ -224,6 +224,14 @@ function wrapQualityList(list) {
   });
 }
 
+router.get('/login', function(req, res) {
+  res.redirect('/auth/login');
+});
+
+router.get('/profile', function(req, res) {
+  res.redirect('/auth/profile');
+});
+
 router.get('/', function(req, res, next) {
   var popularVideos = [];
   var errorPopular = null;
@@ -264,9 +272,14 @@ router.get('/video/:bvid', function(req, res, next) {
     }
 
     if (!videoData || videoData.code !== 0 || !videoData.data) {
-      return res.status(404).render('pages/error', {
+      return res.status(404).render('error', {
         pageTitle: '视频不存在 - CampusBili',
-        message: '视频不存在或已被删除'
+        message: '视频不存在或已被删除',
+        errorType: 'not_found',
+        status: 404,
+        showStack: false,
+        error: {},
+        layoutFullwidth: true
       });
     }
 
@@ -285,9 +298,14 @@ router.get('/video/:bvid', function(req, res, next) {
 
     if (!targetCid) {
       logger.error('无法获取视频 cid');
-      return res.status(500).render('pages/error', {
+      return res.status(500).render('error', {
         pageTitle: '播放失败 - CampusBili',
-        message: '无法获取视频播放地址'
+        message: '无法获取视频播放地址',
+        errorType: 'server_error',
+        status: 500,
+        showStack: false,
+        error: {},
+        layoutFullwidth: true
       });
     }
 
@@ -441,7 +459,8 @@ router.get('/video/:bvid', function(req, res, next) {
                 stripHtmlTags: stripHtmlTags,
                 commentsData: commentsData || null,
                 tagsData: tagsData || [],
-                relatedFromApi: relatedFromApi
+                relatedFromApi: relatedFromApi,
+                layoutFullwidth: true
               });
             });
             return; // 提前返回，等搜索完成后再渲染
@@ -465,7 +484,8 @@ router.get('/video/:bvid', function(req, res, next) {
             stripHtmlTags: stripHtmlTags,
             commentsData: commentsData || null,
             tagsData: tagsData || [],
-            relatedFromApi: relatedFromApi
+            relatedFromApi: relatedFromApi,
+            layoutFullwidth: true
           });
         }
       }
@@ -623,9 +643,14 @@ router.get('/space/:mid', function(req, res, next) {
   var userCookie = getUserCookie(req);
 
   if (!mid || isNaN(parseInt(mid))) {
-    return res.status(400).render('pages/error', {
+    return res.status(400).render('error', {
       pageTitle: '参数错误 - CampusBili',
-      message: '无效的用户 ID'
+      message: '无效的用户 ID',
+      errorType: 'bad_request',
+      status: 400,
+      showStack: false,
+      error: {},
+      layoutFullwidth: true
     });
   }
 
@@ -647,7 +672,8 @@ router.get('/space/:mid', function(req, res, next) {
       formatDate: formatDate,
       formatDuration: formatDuration,
       stripHtmlTags: stripHtmlTags,
-      error: userError
+      error: userError,
+      layoutFullwidth: true
     });
   }
 

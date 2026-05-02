@@ -13,6 +13,7 @@ const rateLimit = require('./middleware/rateLimit');
 const expressLayouts = require('express-ejs-layouts');
 const sessionStore = require('./lib/sessionStore');
 const authService = require('./lib/authService');
+const logger = require('./lib/logger');
 
 const app = express();
 
@@ -218,7 +219,8 @@ app.use(function(err, req, res, next) {
     error: isDev ? err : {},
     errorType: errorType,
     status: status,
-    showStack: isDev
+    showStack: isDev,
+    layoutFullwidth: true
   });
 });
 

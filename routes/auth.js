@@ -91,12 +91,13 @@ router.get('/login', function(req, res) {
   var userInfo = getUserInfo(req, deviceId);
 
   if (userInfo) {
-    return res.redirect('/profile');
+    return res.redirect('/auth/profile');
   }
 
   res.render('pages/login', {
     pageTitle: '登录 - CampusBili',
-    error: null
+    error: null,
+    layoutFullwidth: true
   });
 });
 
@@ -105,7 +106,7 @@ router.get('/profile', function(req, res) {
   var userInfo = getUserInfo(req, deviceId);
 
   if (!userInfo) {
-    return res.redirect('/login');
+    return res.redirect('/auth/login');
   }
 
   var cookieString = sessionStore.getCookieString(deviceId);
@@ -164,7 +165,8 @@ router.get('/profile', function(req, res) {
           stripHtmlTags: function(text) {
             if (!text || typeof text !== 'string') return '';
             return text.replace(/<[^>]*>/g, '');
-          }
+          },
+          layoutFullwidth: true
         });
       });
     });
@@ -178,7 +180,8 @@ router.get('/profile', function(req, res) {
       formatCount: function(c) { return c || '0'; },
       formatDate: function() { return ''; },
       formatDuration: function() { return '00:00'; },
-      stripHtmlTags: function(t) { return t || ''; }
+      stripHtmlTags: function(t) { return t || ''; },
+      layoutFullwidth: true
     });
   });
 });

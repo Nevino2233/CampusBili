@@ -20,7 +20,7 @@
   <meta property="og:site_name" content="CampusBili">
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'><rect width='28' height='28' rx='6' fill='%23FB7299'/><path d='M8 10L14 7L20 10V18L14 21L8 18V10Z' fill='white' opacity='0.9'/><circle cx='14' cy='14' r='3' fill='%23FB7299'/></svg>">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style.css?v=2.1">
   <% if (typeof stylesheets !== 'undefined') { %>
     <% stylesheets.forEach(function(sheet) { %>
       <link rel="stylesheet" href="<%= sheet %>">
@@ -148,9 +148,13 @@
 
   <!-- 主内容区域 -->
   <main class="main-content" id="main-content">
+    <% if (typeof layoutFullwidth !== 'undefined' && layoutFullwidth) { %>
+    <%- body %>
+    <% } else { %>
     <div class="container">
       <%- body %>
     </div>
+    <% } %>
   </main>
 
   <!-- 页脚 -->

@@ -1,11 +1,13 @@
-﻿﻿/* ========================================
-   CampusBili�?- Bilibili 风格样式�?v2.0
-   高质�?UI 设计系统 - 完整�?   ======================================== */
+/* ========================================
+   CampusBili - Bilibili 风格样式 v2.0
+   高质量 UI 设计系统 - 完整版
+   ======================================== */
 
 /* ========================================
-   1. CSS 自定义属性（主题变量�?   ======================================== */
+   1. CSS 自定义属性（主题变量）
+   ======================================== */
 :root {
-  /* 主色�?- Bilibili 品牌色系 */
+  /* 主色系 - Bilibili 品牌色系 */
   --color-primary: #FB7299;
   --color-primary-hover: #e5658a;
   --color-primary-dark: #d9587b;
@@ -31,7 +33,7 @@
   --color-border: #e3e5e7;
   --color-divider: #e3e5e7;
 
-  /* 功能�?*/
+  /* 功能区 */
   --color-success: #23AD68;
   --color-warning: #FF8C3A;
   --color-info: #00AEEC;
@@ -61,7 +63,7 @@
   --transition-normal: 0.25s ease-out;
   --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* 字体�?*/
+  /* 字体系 */
   --font-family-base: "Microsoft YaHei", "微软雅黑", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", sans-serif;
   --font-family-mono: "Consolas", "Monaco", "Courier New", monospace;
 
@@ -101,7 +103,7 @@
   --spacing-4xl: 48px;
   --spacing-5xl: 64px;
 
-  /* 导航栏高�?*/
+  /* 导航栏高度 */
   --header-height: 64px;
   --header-height-mobile: 56px;
 
@@ -150,7 +152,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 防止 iOS 输入框放�?*/
+/* 防止 iOS 输入框放大 */
 input,
 textarea,
 select {
@@ -349,7 +351,7 @@ small {
   color: var(--color-text-secondary);
 }
 
-/* 代码�?*/
+/* 代码块 */
 code, kbd, samp, pre {
   font-family: var(--font-family-mono);
   font-size: 0.9em;
@@ -377,7 +379,7 @@ pre code {
   border-radius: 0;
 }
 
-/* 引用�?*/
+/* 引用块 */
 blockquote {
   margin: var(--spacing-xl) 0;
   padding: var(--spacing-lg) var(--spacing-xl);
@@ -399,7 +401,7 @@ blockquote cite {
   color: var(--color-text-secondary);
 }
 
-/* 分割�?*/
+/* 分割线 */
 hr {
   height: 1px;
   border: none;
@@ -408,7 +410,7 @@ hr {
 }
 
 /* ========================================
-   4. 滚动条自定义样式（Webkit�?   ======================================== */
+   4. 滚动条自定义样式（Webkit浏览器   ======================================== */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -431,7 +433,7 @@ hr {
   background-clip: content-box;
 }
 
-/* Firefox 滚动�?*/
+/* Firefox 滚动?*/
 * {
   scrollbar-width: thin;
   scrollbar-color: #c8c9cc transparent;
@@ -451,7 +453,7 @@ hr {
 }
 
 /* ========================================
-   6. 工具类（Utilities�?   ======================================== */
+   6. 工具类（Utilities工具类   ======================================== */
 
 /* 文本对齐 */
 .text-center { text-align: center; }
@@ -484,7 +486,7 @@ hr {
 .d-inline-flex { display: inline-flex; }
 .d-grid { display: grid; }
 
-/* Flexbox 工具�?*/
+/* Flexbox 工具类*/
 .flex-row { flex-direction: row; }
 .flex-column { flex-direction: column; }
 .flex-wrap { flex-wrap: wrap; }
@@ -531,18 +533,18 @@ hr {
   text-overflow: ellipsis;
 }
 
-/* 定位工具�?*/
+/* 定位工具类*/
 .position-relative { position: relative; }
 .position-absolute { position: absolute; }
 .position-fixed { position: fixed; }
 .position-sticky { position: sticky; }
 
-/* 宽度工具�?*/
+/* 宽度工具类*/
 .w-100 { width: 100%; }
 .h-100 { height: 100%; }
 .min-h-screen { min-height: 100vh; }
 
-/* 间距工具�?*/
+/* 间距工具类*/
 .m-0 { margin: 0; }
 .mt-0 { margin-top: 0; }
 .mr-0 { margin-right: 0; }
@@ -581,7 +583,7 @@ hr {
   clear: both;
 }
 
-/* 可见�?*/
+/* 可见性*/
 .visible { visibility: visible; }
 .invisible { visibility: hidden; }
 .opacity-0 { opacity: 0; }
@@ -618,7 +620,7 @@ hr {
   padding: 0 var(--spacing-xl);
 }
 
-/* 主内容区�?*/
+/* 主内容区域*/
 .main-content {
   margin-top: calc(var(--header-height) + var(--spacing-xl));
   min-height: calc(100vh - 200px);
@@ -626,7 +628,7 @@ hr {
 }
 
 /* ========================================
-   8. 导航栏组�?(.site-header)
+   8. 导航栏组件(.site-header)
    ======================================== */
 .site-header {
   position: fixed;
@@ -680,7 +682,7 @@ hr {
   50% { transform: translateY(-3px); }
 }
 
-/* 主导航区�?*/
+/* 主导航区域*/
 .main-nav {
   display: flex;
   align-items: center;
@@ -739,7 +741,7 @@ hr {
   }
 }
 
-/* 搜索框组�?*/
+/* 搜索框组件*/
 .search-box {
   position: relative;
 }
@@ -808,7 +810,7 @@ hr {
   transform: scale(0.98);
 }
 
-/* 搜索建议下拉�?*/
+/* 搜索建议下拉框*/
 .search-suggestions {
   position: absolute;
   top: 100%;
@@ -1151,7 +1153,7 @@ hr {
 }
 
 /* ========================================
-   9. 移动端导航菜�?   ======================================== */
+   9. 移动端导航菜单   ======================================== */
 
 /* 汉堡菜单按钮 */
 .mobile-menu-btn {
@@ -1180,7 +1182,7 @@ hr {
   transform-origin: center;
 }
 
-/* 汉堡按钮动画 - 打开状�?*/
+/* 汉堡按钮动画 - 打开状态*/
 .mobile-menu-btn.active .hamburger-line:nth-child(1) {
   transform: rotate(45deg) translate(6px, 6px);
 }
@@ -1287,7 +1289,7 @@ hr {
   width: 100%;
 }
 
-/* 遮罩�?*/
+/* 遮罩层*/
 .nav-overlay {
   position: fixed;
   top: 0;
@@ -1323,7 +1325,7 @@ hr {
   animation: fadeInUp 0.6s ease-out;
 }
 
-/* 装饰性几何图�?- 使用伪元�?*/
+/* 装饰性几何图形- 使用伪元素*/
 .banner-section::before {
   content: '';
   position: absolute;
@@ -1348,7 +1350,7 @@ hr {
   animation: float-decoration 8s ease-in-out infinite reverse;
 }
 
-/* 额外的装饰圆�?*/
+/* 额外的装饰圆形*/
 .banner-circle-1,
 .banner-circle-2,
 .banner-square-1 {
@@ -1644,7 +1646,7 @@ hr {
   transform: scale(1.08);
 }
 
-/* 封面悬停遮罩�?*/
+/* 封面悬停遮罩层*/
 .video-cover::after {
   content: '';
   position: absolute;
@@ -1661,7 +1663,7 @@ hr {
   opacity: 1;
 }
 
-/* 封面信息覆盖层（播放�?弹幕数） */
+/* 封面信息覆盖层（播放量弹幕数） */
 .cover-overlay {
   position: absolute;
   bottom: 0;
@@ -1773,7 +1775,7 @@ hr {
   color: var(--color-text-secondary);
 }
 
-/* 视频卡片骨架屏加载�?*/
+/* 视频卡片骨架屏加载态*/
 .card-skeleton {
   background-color: var(--color-bg-card);
   border-radius: var(--radius-lg);
@@ -1848,7 +1850,7 @@ hr {
 }
 
 /* ========================================
-   14. 排行榜组�?   ======================================== */
+   14. 排行榜组件   ======================================== */
 .ranking-section {
   margin-bottom: var(--spacing-3xl);
   animation: fadeInUp 0.6s ease-out 0.4s both;
@@ -1912,7 +1914,7 @@ hr {
   box-shadow: 0 6px 20px rgba(251, 114, 153, 0.45);
 }
 
-/* 排行榜列�?*/
+/* 排行榜列表*/
 .ranking-list {
   background-color: var(--color-bg-card);
   border-radius: var(--radius-lg);
@@ -1920,7 +1922,7 @@ hr {
   box-shadow: var(--shadow-sm);
 }
 
-/* 排行榜分页提�?*/
+/* 排行榜分页提示*/
 .pagination-hint {
   text-align: center;
   padding: var(--spacing-lg) 0;
@@ -1985,7 +1987,7 @@ hr {
   transform: scale(1.1);
 }
 
-/* �?名特殊颜色：�?�?�?*/
+/* ?名特殊颜色：???*/
 .ranking-rank.top-1 {
   background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
   color: #ffffff;
@@ -2032,7 +2034,7 @@ hr {
   object-fit: cover;
 }
 
-/* 排行榜信�?*/
+/* 排行榜信息*/
 .ranking-info {
   flex: 1;
   min-width: 0;
@@ -2275,7 +2277,7 @@ hr {
   box-shadow: 0 2px 8px rgba(251, 114, 153, 0.3);
 }
 
-/* UP主搜索结�?*/
+/* UP主搜索结果*/
 .up-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -2356,7 +2358,7 @@ hr {
   font-weight: 600;
 }
 
-/* 搜索结果关键词高�?*/
+/* 搜索结果关键词高亮*/
 .search-result-title {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -2403,14 +2405,14 @@ hr {
 }
 
 /* ========================================
-   17. 视频详情�?/ 播放�?   ======================================== */
+   17. 视频详情页/播放页   ======================================== */
 .page-video-detail {
   margin-top: calc(var(--header-height) + var(--spacing-xl));
   min-height: calc(100vh - 200px);
   padding-bottom: var(--spacing-3xl);
 }
 
-/* 推荐视频�?*/
+/* 推荐视频区*/
 .page-recommend {
   padding: var(--spacing-xl) 0;
 }
@@ -2443,7 +2445,7 @@ hr {
   animation: fadeInUp 0.5s ease-out;
 }
 
-/* 播放器容�?- 16:9 比例 */
+/* 播放器容器- 16:9 比例 */
 .player-container {
   background-color: #000000;
   border-radius: var(--radius-lg);
@@ -2862,7 +2864,7 @@ hr {
   line-height: 1.4;
 }
 
-/* 视频元数�?*/
+/* 视频元数据*/
 .video-meta {
   display: flex;
   justify-content: space-between;
@@ -2929,7 +2931,7 @@ hr {
   color: var(--color-text-secondary);
 }
 
-/* 视频统计数据�?*/
+/* 视频统计数据区*/
 .video-stats {
   display: flex;
   gap: var(--spacing-lg);
@@ -3001,7 +3003,7 @@ hr {
   color: #fff;
 }
 
-/* 视频简介区�?*/
+/* 视频简介区域*/
 .video-description-section {
   margin-top: 0;
 }
@@ -3089,7 +3091,7 @@ hr {
   background: linear-gradient(90deg, var(--color-primary) 0%, transparent 100%);
 }
 
-/* UP主信息卡�?*/
+/* UP主信息卡片*/
 .uploader-card {
   padding: var(--spacing-lg);
 }
@@ -3357,7 +3359,7 @@ hr {
 .retry-btn:active { transform: scale(0.97); }
 
 /* ========================================
-   18. 排行榜样式增�?   ======================================== */
+   18. 排行榜样式增强   ======================================== */
 .ranking-page-tabs {
   display: flex;
   gap: var(--spacing-xs);
@@ -3408,9 +3410,9 @@ hr {
 }
 
 /* ========================================
-   19. 番剧详情�?   ======================================== */
+   19. 番剧详情页   ======================================== */
 
-/* 头部大封面区�?*/
+/* 头部大封面区域*/
 .bangumi-header {
   display: flex;
   gap: var(--spacing-3xl);
@@ -3547,7 +3549,7 @@ hr {
   transform: translateY(-2px);
 }
 
-/* 番剧简�?*/
+/* 番剧简介*/
 .bangumi-description {
   font-size: 14px;
   line-height: 1.8;
@@ -3560,7 +3562,7 @@ hr {
   text-overflow: ellipsis;
 }
 
-/* 番剧元信�?*/
+/* 番剧元信息*/
 .bangumi-meta {
   display: flex;
   flex-wrap: wrap;
@@ -3728,7 +3730,7 @@ hr {
   color: #ffffff;
 }
 
-/* 最�?未开播标�?*/
+/* 最新未开播标识*/
 .latest-tag {
   position: absolute;
   top: 8px;
@@ -3979,7 +3981,7 @@ hr {
 }
 
 /* ========================================
-   20. 直播观看�?   ======================================== */
+   20. 直播观看页   ======================================== */
 .live-page {
   display: grid;
   grid-template-columns: 1fr 380px;
@@ -3987,7 +3989,7 @@ hr {
   animation: fadeInUp 0.5s ease-out;
 }
 
-/* 直播播放器区�?*/
+/* 直播播放器区域*/
 .live-player-section {
   min-width: 0;
 }
@@ -4049,7 +4051,7 @@ hr {
   letter-spacing: 0.5px;
 }
 
-/* 直播播放器容�?- 16:9 比例 */
+/* 直播播放器容器- 16:9 比例 */
 .live-player-container {
   position: relative;
   width: 100%;
@@ -4121,7 +4123,7 @@ hr {
   animation: pulse 2s ease-in-out infinite;
 }
 
-/* 弹幕预留�?*/
+/* 弹幕预留区*/
 .danmu-section {
   background-color: var(--color-bg-card);
   border-radius: var(--radius-lg);
@@ -4143,7 +4145,7 @@ hr {
   font-style: italic;
 }
 
-/* 直播间信息区�?*/
+/* 直播间信息区域*/
 .live-info-section {
   display: flex;
   flex-direction: column;
@@ -4393,7 +4395,7 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 300px);
+  min-height: calc(100vh - var(--header-height) - var(--spacing-xl));
   padding: 60px 20px;
   background: linear-gradient(135deg, var(--color-bg-active) 0%, var(--color-bg-card) 50%, #f0f7ff 100%);
   border-radius: var(--radius-xl);
@@ -4472,7 +4474,7 @@ hr {
   animation: fadeInUp 0.6s ease-out 0.2s both;
 }
 
-/* 操作按钮�?*/
+/* 操作按钮组*/
 .error-actions {
   display: flex;
   justify-content: center;
@@ -4681,7 +4683,7 @@ hr {
 }
 
 /* ========================================
-   23. 组件级样�?- Button 按钮
+   23. 组件级样式- Button 按钮
    ======================================== */
 .btn {
   display: inline-flex;
@@ -4789,7 +4791,7 @@ hr {
 }
 
 /* ========================================
-   24. 组件级样�?- Badge 徽章
+   24. 组件级样式- Badge 徽章
    ======================================== */
 .badge {
   display: inline-flex;
@@ -4838,7 +4840,7 @@ hr {
 }
 
 /* ========================================
-   25. 组件级样�?- Tag 标签
+   25. 组件级样式- Tag 标签
    ======================================== */
 .tag {
   display: inline-flex;
@@ -4891,7 +4893,7 @@ hr {
 }
 
 /* ========================================
-   26. 组件级样�?- Tooltip 提示�?   ======================================== */
+   26. 组件级样式- Tooltip 提示框   ======================================== */
 .tooltip {
   position: relative;
   display: inline-block;
@@ -4965,7 +4967,7 @@ hr {
 }
 
 /* ========================================
-   27. 组件级样�?- Skeleton Loading
+   27. 组件级样式- Skeleton Loading
    ======================================== */
 .skeleton {
   position: relative;
@@ -5055,7 +5057,7 @@ hr {
 }
 
 /* ========================================
-   28. 组件级样�?- Empty State 空状�?   ======================================== */
+   28. 组件级样式- Empty State 空状态   ======================================== */
 .empty-state {
   text-align: center;
   padding: 80px 20px;
@@ -5097,7 +5099,7 @@ hr {
 }
 
 /* ========================================
-   29. 组件级样�?- Loading Spinner
+   29. 组件级样式- Loading Spinner
    ======================================== */
 .loading-spinner {
   display: flex;
@@ -5166,7 +5168,7 @@ hr {
 }
 
 /* ========================================
-   30. 组件级样�?- Toast 通知
+   30. 组件级样式- Toast 通知
    ======================================== */
 .toast {
   position: fixed;
@@ -5235,7 +5237,7 @@ hr {
 }
 
 /* ========================================
-   31. 组件级样�?- Tabs 标签�?   ======================================== */
+   31. 组件级样式- Tabs 标签页   ======================================== */
 .tabs {
   width: 100%;
 }
@@ -5317,7 +5319,7 @@ hr {
   }
 }
 
-/* Tabs 变体 - 卡片�?*/
+/* Tabs 变体 - 卡片式*/
 .tabs-card .tabs-header {
   background-color: var(--color-bg-page);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
@@ -5352,7 +5354,7 @@ hr {
 }
 
 /* ========================================
-   32. 错误提示与成功消�?   ======================================== */
+   32. 错误提示与成功消息   ======================================== */
 .message {
   padding: var(--spacing-md) var(--spacing-xl);
   border-radius: var(--radius-md);
@@ -5448,7 +5450,7 @@ hr {
    33. 动画与关键帧定义
    ======================================== */
 
-/* 入场动画 - 从下往上淡�?*/
+/* 入场动画 - 从下往上淡入*/
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -5460,7 +5462,7 @@ hr {
   }
 }
 
-/* 入场动画 - 从上往下淡�?*/
+/* 入场动画 - 从上往下淡入*/
 @keyframes fadeInDown {
   from {
     opacity: 0;
@@ -5472,7 +5474,7 @@ hr {
   }
 }
 
-/* 入场动画 - 从左往右淡�?*/
+/* 入场动画 - 从左往右淡入*/
 @keyframes fadeInLeft {
   from {
     opacity: 0;
@@ -5484,7 +5486,7 @@ hr {
   }
 }
 
-/* 入场动画 - 从右往左淡�?*/
+/* 入场动画 - 从右往左淡入*/
 @keyframes fadeInRight {
   from {
     opacity: 0;
@@ -5618,16 +5620,16 @@ hr {
 }
 
 /* ========================================
-   34. 响应式设�?- 断点系统
+   34. 响应式设计- 断点系统
    ======================================== */
 
 /*
-  断点说明�?  - 大屏 (�?200px): 默认桌面端样�?  - 中屏 (992px - 1199px): 平板横屏 / 小笔记本
+  断点说明：  - 大屏 (≥200px): 默认桌面端样式  - 中屏 (992px - 1199px): 平板横屏 / 小笔记本
   - 小屏 (768px - 991px): 平板竖屏
-  - 超小�?(�?80px): 手机竖屏
+  - 超小屏 (≤80px): 手机竖屏
 */
 
-/* ====== 断点 1: �?200px (大屏以下) ====== */
+/* ====== 断点 1: ?200px (大屏以下) ====== */
 @media (max-width: 1200px) {
   :root {
     --header-height: 62px;
@@ -5667,11 +5669,11 @@ hr {
 }
 
 /* ========================================
-   结束 - CampusBili�?Bilibili 风格样式�?v2.0
+   结束 - CampusBili?Bilibili 风格样式?v2.0
    ======================================== */
 
 /* ========================================
-   37. 用户入口与登录页�?   ======================================== */
+   37. 用户入口与登录页面   ======================================== */
 .user-entry {
   display: flex;
   align-items: center;
@@ -5727,11 +5729,11 @@ hr {
 }
 
 .login-page {
-  min-height: calc(100vh - 200px);
+  min-height: calc(100vh - var(--header-height) - var(--spacing-xl));
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-2xl) var(--spacing-md);
+  padding: var(--spacing-3xl) var(--spacing-md);
   background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 50%, #f0f2f5 100%);
 }
 
@@ -6314,7 +6316,7 @@ hr {
 }
 
 /* ========== 视频标签 ========== */
-/* ========== 评论�?========== */
+/* ========== 评论区========== */
 .comments-section { margin-top: var(--spacing-lg); }
 .comments-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--color-border); padding-bottom: 12px; }
 .comments-title { font-size: 18px; font-weight: 600; color: var(--color-text-primary); margin: 0; }
@@ -6360,7 +6362,7 @@ hr {
 /* ========== UP主空间页 ========== */
 .space-page { max-width: 1200px; margin: 0 auto; min-height: calc(100vh - 160px); }
 
-/* ====== 动态页�?====== */
+/* ====== 动态页面====== */
 .back-button { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; margin-bottom: 12px; font-size: 13px; color: var(--color-text-secondary); background: var(--color-bg-page); border: 1px solid var(--color-border); border-radius: var(--radius-md); text-decoration: none; transition: all var(--transition-fast); cursor: pointer; }
 
 .back-button:hover { color: var(--color-primary); border-color: var(--color-primary); background: rgba(251,114,153,0.06); }
@@ -6560,7 +6562,7 @@ hr {
 .back-to-top.show { display: flex; opacity: 1; transform: translateY(0); }
 .back-to-top:hover { background: var(--color-primary); color: #fff; border-color: var(--color-primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(251,114,153,0.3); }
 
-/* ========== 移动端适配（视�?番剧/直播/播放器） ========== */
+/* ========== 移动端适配（视频番剧/直播/播放器） ========== */
 @media (max-width: 768px) {
   .episode-card {
     padding: var(--spacing-md) var(--spacing-sm);
@@ -6656,7 +6658,7 @@ hr {
   }
 }
 
-/* ====== 断点 4: �?80px (超小�?手机竖屏) ====== */
+/* ====== 断点 4: ?80px (超小屏手机竖屏) ====== */
 @media (max-width: 480px) {
   :root {
     --header-height: 52px;
@@ -6694,7 +6696,7 @@ hr {
     padding: 0 var(--spacing-sm);
   }
 
-  /* Banner 超小�?*/
+  /* Banner 超小屏*/
   .banner-section {
     padding: 30px 16px;
     border-radius: var(--radius-md);
@@ -6762,7 +6764,7 @@ hr {
     -webkit-line-clamp: 2;
   }
 
-  /* 排行�?*/
+  /* 排行榜*/
   .ranking-tabs {
     gap: var(--spacing-xs);
   }
@@ -6786,7 +6788,7 @@ hr {
     font-size: 13px;
   }
 
-  /* 搜索�?*/
+  /* 搜索页*/
   .search-header {
     padding: var(--spacing-lg) var(--spacing-md);
     border-radius: var(--radius-md);
@@ -6874,7 +6876,7 @@ hr {
     margin: 0 4px;
   }
 
-  /* 视频播放�?*/
+  /* 视频播放页*/
   .video-player-page {
     grid-template-columns: 1fr;
     gap: 0;
@@ -6936,7 +6938,7 @@ hr {
     font-size: 11px;
   }
 
-  /* 番剧�?*/
+  /* 番剧页*/
   .bangumi-header {
     padding: var(--spacing-md);
     border-radius: var(--radius-md);
@@ -7003,7 +7005,7 @@ hr {
     font-size: 13px;
   }
 
-  /* 直播�?*/
+  /* 直播页*/
   .anchor-card {
     padding: var(--spacing-md);
   }
@@ -7027,7 +7029,7 @@ hr {
     padding: var(--spacing-md);
   }
 
-  /* 错误�?*/
+  /* 错误页*/
   .error-page {
     padding: 30px 16px;
     border-radius: var(--radius-md);
@@ -7152,16 +7154,16 @@ hr {
 }
 
 /* ========================================
-   36. 无障碍访问增�?(a11y)
+   36. 无障碍访问增强(a11y)
    ======================================== */
 
-/* 焦点可见性增�?*/
+/* 焦点可见性增强*/
 :focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
-/* 跳过导航链接（屏幕阅读器�?*/
+/* 跳过导航链接（屏幕阅读器）*/
 .skip-link {
   position: absolute;
   top: -100%;
@@ -7298,9 +7300,9 @@ hr {
   to { transform: scale(1); opacity: 1; }
 }
 
-/* ====== 断点 1 补充: �?68px (移动�? ====== */
+/* ====== 断点 1 补充: ?68px (移动端 ====== */
 
-/* ====== 断点 2: �?92px (中屏以下) ====== */
+/* ====== 断点 2: ?92px (中屏以下) ====== */
 @media (max-width: 992px) {
   :root {
     --header-height: 58px;
@@ -7457,7 +7459,7 @@ hr {
   }
 }
 
-/* ====== 断点 3: �?68px (小屏/平板以下) ====== */
+/* ====== 断点 3: ?68px (小屏/平板以下) ====== */
 @media (max-width: 768px) {
   :root {
     --header-height: var(--header-height-mobile);
@@ -7520,7 +7522,7 @@ hr {
     padding: 0 var(--spacing-md);
   }
 
-  /* Banner 响应�?*/
+  /* Banner 响应式*/
   .banner-section {
     padding: 40px 20px;
     border-radius: var(--radius-lg);
@@ -7540,7 +7542,7 @@ hr {
     display: none;
   }
 
-  /* 频道导航响应�?*/
+  /* 频道导航响应式*/
   .channel-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: var(--spacing-sm);
@@ -7559,7 +7561,7 @@ hr {
     font-size: 12px;
   }
 
-  /* 视频卡片网格响应�?*/
+  /* 视频卡片网格响应式*/
   .video-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
@@ -7622,7 +7624,7 @@ hr {
     margin-bottom: var(--spacing-md);
   }
 
-  /* 分页响应�?*/
+  /* 分页响应式*/
   .pagination {
     flex-wrap: wrap;
     gap: var(--spacing-xs);
@@ -7634,7 +7636,7 @@ hr {
     font-size: 13px;
   }
 
-  /* 页脚响应�?*/
+  /* 页脚响应式*/
   .footer-links {
     display: flex;
     flex-direction: column;
@@ -7677,7 +7679,7 @@ hr {
 }
 
 /* ========================================
-   结束 - CampusBili�?Bilibili 风格样式�?v2.0
+   结束 - CampusBili?Bilibili 风格样式?v2.0
    ======================================== */
 
 /* v1.0 交互细节增强 */
