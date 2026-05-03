@@ -11,6 +11,16 @@
       <a href="/search?keyword=<%= encodeURIComponent(keyword) %>&search_type=video" class="search-type-tab <%= currentSearchType === 'video' ? 'active' : '' %>">视频</a>
       <a href="/search?keyword=<%= encodeURIComponent(keyword) %>&search_type=bili_user" class="search-type-tab <%= currentSearchType === 'bili_user' ? 'active' : '' %>">UP主</a>
     </div>
+
+    <% if (currentSearchType === 'video' && searchResults && searchResults.length > 0) { %>
+    <div class="search-sort-options">
+      <span class="sort-label">排序：</span>
+      <a href="/search?keyword=<%= encodeURIComponent(keyword) %>&search_type=video&order=totalrank" class="sort-option <%= (!order || order === 'totalrank') ? 'active' : '' %>">综合</a>
+      <a href="/search?keyword=<%= encodeURIComponent(keyword) %>&search_type=video&order=click" class="sort-option <%= order === 'click' ? 'active' : '' %>">播放量</a>
+      <a href="/search?keyword=<%= encodeURIComponent(keyword) %>&search_type=video&order=pubdate" class="sort-option <%= order === 'pubdate' ? 'active' : '' %>">最新发布</a>
+      <a href="/search?keyword=<%= encodeURIComponent(keyword) %>&search_type=video&order=dm" class="sort-option <%= order === 'dm' ? 'active' : '' %>">弹幕数</a>
+    </div>
+    <% } %>
   </div>
 
   <!-- 搜索结果 -->
@@ -28,7 +38,7 @@
         >
       </div>
       <div class="up-info">
-        <h3 class="up-name"><%= result.uname || '未知UP主' %></h3>
+        <h3 class="up-name"><%- typeof highlightKeyword !== 'undefined' ? highlightKeyword(result.uname || '未知UP主', keyword) : (result.uname || '未知UP主') %></h3>
         <p class="up-sign"><%= result.usign || '这个人很懒，什么都没写~' %></p>
         <div class="up-stats">
           <span class="up-stat">粉丝 <strong><%= formatCount(result.fans || 0) %></strong></span>
@@ -80,6 +90,9 @@
           loading="lazy"
           onerror="var el=this;el.onerror=null;el.style.cssText='background:#eee;display:flex;align-items:center;justify-content:center;font-size:12px;color:#999';el.alt='加载失败';el.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIj48cmVjdCBmaWxsPSIjZWVlIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LXNpemU9IjE0Ij7nu6flg7o8L3RleHQ+PC9zdmc+'"
         >
+        <% if (result.duration) { %>
+        <span class="cover-duration"><%= result.duration %></span>
+        <% } %>
         <div class="cover-overlay">
           <span class="cover-stat">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
@@ -96,7 +109,7 @@
         </div>
       </div>
       <div class="video-info">
-        <h3 class="video-title search-result-title"><%- typeof sanitizeTitle !== 'undefined' ? sanitizeTitle(result.title) : (result.title || '').replace(/<script[\s\S]*?<\/script>|<iframe[\s\S]*?<\/iframe>|<object[\s\S]*?<\/object>|<embed[^>]*>|on\w+\s*=\s*["'][^"']*['"]|javascript:|<img[^>]*>/gi, '') %></h3>
+        <h3 class="video-title search-result-title"><%- typeof highlightKeyword !== 'undefined' ? highlightKeyword(result.title, keyword) : sanitizeTitle(result.title) %></h3>
         <div class="video-meta">
           <span class="video-author"><%= result.author || result.owner && result.owner.name ? result.author || result.owner.name : '未知UP主' %></span>
           <div class="video-stats">

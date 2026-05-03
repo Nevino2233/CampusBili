@@ -124,16 +124,14 @@ function extractKeyword(title) {
 
 function sanitizeTitle(title) {
   if (!title || typeof title !== 'string') return '';
-  var sanitized = title
-    .replace(/<script[\s\S]*?<\/script>/gi, '')
-    .replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
-    .replace(/<object[\s\S]*?<\/object>/gi, '')
-    .replace(/<embed[^>]*>/gi, '')
-    .replace(/on\w+\s*=\s*"[^"]*"/gi, '')
-    .replace(/on\w+\s*=\s*'[^']*'/gi, '')
-    .replace(/javascript:/gi, '')
-    .replace(/<img[^>]*>/gi, '');
-  return sanitized;
+  return title.replace(/<[^>]*>/g, '');
+}
+
+function highlightKeyword(text, keyword) {
+  if (!text || !keyword) return text || '';
+  var clean = text.replace(/<[^>]*>/g, '');
+  var escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return clean.replace(new RegExp('(' + escaped + ')', 'gi'), '<mark class="search-highlight">$1</mark>');
 }
 
 /**
@@ -248,6 +246,7 @@ router.get('/', function(req, res, next) {
       pageTitle: 'CampusBili - 首页',
       popularVideos: popularVideos,
       formatCount: formatCount,
+      formatDuration: formatDuration,
       error: errorPopular
     });
   });
@@ -578,7 +577,8 @@ router.get('/ranking', function(req, res, next) {
       currentRid: rid,
       currentPage: page,
       total: total,
-      formatCount: formatCount
+      formatCount: formatCount,
+      formatDuration: formatDuration
     });
   });
 });
@@ -623,13 +623,14 @@ router.get('/search', function(req, res, next) {
       keyword: keyword,
       searchResults: searchResults,
       currentSearchType: searchType,
-      currentOrder: order,
+      order: order,
       currentTids: tids,
       currentPage: page,
       total: total,
       numResults: numResults,
       formatCount: formatCount,
-      sanitizeTitle: sanitizeTitle
+      sanitizeTitle: sanitizeTitle,
+      highlightKeyword: highlightKeyword
     });
   });
 });

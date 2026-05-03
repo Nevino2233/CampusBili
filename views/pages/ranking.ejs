@@ -39,8 +39,12 @@
         <img
           src="/image/proxy?url=<%= encodeURIComponent(item.pic) %>"
           alt="<%= item.title %>"
-          onerror="this.src='/image/proxy?url=https://i0.hdslb.com/bfs/archive/dummy.jpg'"
+          loading="lazy"
+          onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIj48cmVjdCBmaWxsPSIjZWVlIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LXNpemU9IjE0Ij7nu6flg7o8L3RleHQ+PC9zdmc+'"
         >
+        <% if (item.duration) { %>
+        <span class="cover-duration"><%= formatDuration(item.duration) %></span>
+        <% } %>
       </div>
       <div class="ranking-info">
         <h4 class="ranking-title"><%= item.title %></h4>

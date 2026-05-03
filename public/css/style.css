@@ -152,6 +152,28 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.main-content {
+  animation: fadeInPage 0.3s ease-out;
+}
+
+@keyframes fadeInPage {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+button:active,
+.page-btn:active,
+.load-more-btn:active {
+  transform: scale(0.97);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* 防止 iOS 输入框放大 */
 input,
 textarea,
@@ -1611,9 +1633,19 @@ hr {
   transition: all var(--transition-normal);
   box-shadow: var(--shadow-sm);
   position: relative;
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 .video-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+.video-card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
   transform: translateY(-6px);
   box-shadow: var(--shadow-hover);
 }
@@ -1692,6 +1724,21 @@ hr {
   align-items: center;
   gap: 4px;
   font-weight: 500;
+}
+
+.cover-duration {
+  position: absolute;
+  bottom: var(--spacing-sm);
+  right: var(--spacing-sm);
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  font-size: 12px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  z-index: 3;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  line-height: 1.4;
 }
 
 .cover-stat-icon {
@@ -2022,6 +2069,7 @@ hr {
   flex-shrink: 0;
   background-color: var(--color-border);
   transition: transform var(--transition-normal);
+  position: relative;
 }
 
 .ranking-item:hover .ranking-cover {
@@ -2275,6 +2323,51 @@ hr {
   background-color: var(--color-primary);
   color: #ffffff;
   box-shadow: 0 2px 8px rgba(251, 114, 153, 0.3);
+}
+
+.search-sort-options {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.sort-label {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-right: var(--spacing-xs);
+}
+
+.sort-option {
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+}
+
+.sort-option:hover {
+  color: var(--color-primary);
+  background-color: rgba(251, 114, 153, 0.08);
+}
+
+.sort-option.active {
+  color: var(--color-primary);
+  background-color: rgba(251, 114, 153, 0.12);
+  border-color: rgba(251, 114, 153, 0.3);
+  font-weight: 500;
+}
+
+mark.search-highlight {
+  background-color: rgba(251, 114, 153, 0.2);
+  color: var(--color-primary);
+  padding: 0 2px;
+  border-radius: 2px;
+  font-style: normal;
 }
 
 /* UP主搜索结果*/
@@ -6383,15 +6476,12 @@ hr {
 
 .dynamic-list { padding: var(--spacing-md); }
 
-.dynamic-login-prompt { text-align: center; padding: 60px 20px; color: var(--color-text-secondary); }
-
-.dynamic-login-prompt svg { margin-bottom: 16px; opacity: 0.4; }
-
-.dynamic-login-prompt p { font-size: 16px; margin-bottom: 20px; }
-
-.dynamic-login-btn { display: inline-block; padding: 10px 32px; background: var(--color-primary); color: #fff; border-radius: var(--radius-md); font-size: 15px; text-decoration: none; transition: background var(--transition-fast); }
-
-.dynamic-login-btn:hover { background: var(--color-primary-dark); }
+.dynamic-login-prompt { text-align: center; padding: 80px 20px; color: var(--color-text-secondary); }
+.dynamic-login-prompt svg { margin-bottom: 20px; opacity: 0.3; width: 80px; height: 80px; }
+.dynamic-login-prompt p { font-size: 16px; margin-bottom: 24px; color: var(--color-text-secondary); }
+.dynamic-login-btn { display: inline-block; padding: 12px 36px; background: var(--color-primary); color: #fff; border-radius: var(--radius-full); font-size: 15px; text-decoration: none; transition: all var(--transition-fast); box-shadow: 0 4px 12px rgba(251, 114, 153, 0.3); }
+.dynamic-login-btn:hover { background: var(--color-primary-dark); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(251, 114, 153, 0.4); }
+.dynamic-login-btn:active { transform: translateY(0); }
 
 .dynamic-loading { text-align: center; padding: 40px 20px; color: var(--color-text-secondary); }
 

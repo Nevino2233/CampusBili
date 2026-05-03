@@ -17,8 +17,7 @@
 
     <div class="video-grid">
       <% popularVideos.forEach(function(video) { %>
-      <div class="video-card"
-           onclick="window.location.href='/video/<%= video.bvid %>'"
+      <a href="/video/<%= video.bvid %>" class="video-card"
            data-bvid="<%= video.bvid %>"
            data-title="<%= video.title %>"
            data-author="<%= video.owner && video.owner.name ? video.owner.name : '未知UP主' %>"
@@ -27,8 +26,12 @@
           <img
             src="/image/proxy?url=<%= encodeURIComponent(video.pic) %>"
             alt="<%= video.title %>"
-            onerror="this.src='/image/proxy?url=https://i0.hdslb.com/bfs/archive/dummy.jpg'"
+            loading="lazy"
+            onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIj48cmVjdCBmaWxsPSIjZWVlIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LXNpemU9IjE0Ij7nu6flg7o8L3RleHQ+PC9zdmc+'"
           >
+          <% if (video.duration) { %>
+          <span class="cover-duration"><%= formatDuration(video.duration) %></span>
+          <% } %>
           <div class="cover-overlay">
             <span class="cover-stat">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
@@ -53,7 +56,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </a>
       <% }); %>
     </div>
   </section>
