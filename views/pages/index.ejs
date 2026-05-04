@@ -21,7 +21,8 @@
            data-bvid="<%= video.bvid %>"
            data-title="<%= video.title %>"
            data-author="<%= video.owner && video.owner.name ? video.owner.name : '未知UP主' %>"
-           data-view="<%= video.stat && video.stat.view ? video.stat.view : 0 %>">
+           data-view="<%= video.stat && video.stat.view ? video.stat.view : 0 %>"
+           style="animation-delay: <%= (popularVideos.indexOf(video) % 4) * 0.05 %>s">
         <div class="video-cover">
           <img
             src="/image/proxy?url=<%= encodeURIComponent(video.pic) %>"

@@ -53,6 +53,28 @@
     btn.addEventListener('click', function() { smoothScrollTo(0, 500); });
   }
 
+  function initScrollHeader() {
+    var header = $('#siteHeader');
+    if (!header) return;
+    var lastScroll = 0;
+    var ticking = false;
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(function() {
+          var currentScroll = window.pageYOffset;
+          if (currentScroll > 100 && currentScroll > lastScroll) {
+            header.style.transform = 'translateY(-100%)';
+          } else {
+            header.style.transform = 'translateY(0)';
+          }
+          lastScroll = currentScroll;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
   var Toast = {
     show: function(message, type, duration) {
       type = type || 'info';
@@ -1145,6 +1167,7 @@
   function init() {
     initPageLoader();
     initBackToTop();
+    initScrollHeader();
     initSearchBox();
     initSearchSuggestions();
     initVideoCards();
