@@ -251,8 +251,8 @@
               <div class="recommend-info">
                 <div class="recommend-title"><%= stripHtmlTags(video.title) %></div>
                 <div class="recommend-meta">
-                  <span><%= formatCount(video.play || video.stat && video.stat.view ? video.play || video.stat.view : 0) %> 播放</span>
-                  <span><%= video.author || video.owner && video.owner.name ? video.author || video.owner.name : '未知 UP 主' %></span>
+                  <span><%= formatCount(video.play || (video.stat && video.stat.view) || 0) %> 播放</span>
+                  <span><%= video.author || (video.owner && video.owner.name) || '未知 UP 主' %></span>
                 </div>
               </div>
             </a>
@@ -280,8 +280,8 @@
 <script type="text/javascript">
   var _bvid = '<%= bvid %>';
   var _cid = <%= cid %>;
-  var _pages = <%- JSON.stringify(pages || []) %>;
-  var _qualityList = <%- JSON.stringify((qualityList || []).map(function(q) { return Object.assign({}, q, { url: encodeURIComponent(q.url) }); })) %>;
+  var _pages = <%- JSON.stringify(pages || []).replace(/<\//g, '<\\/') %>;
+  var _qualityList = <%- JSON.stringify((qualityList || []).map(function(q) { return Object.assign({}, q, { url: encodeURIComponent(q.url) }); })).replace(/<\//g, '<\\/') %>;
   var _hasVideo = <%= playUrl ? 'true' : 'false' %>;
 
   window.videoPageData = {
@@ -301,5 +301,4 @@
   }
 </script>
 
-<link rel="stylesheet" href="/xgplayer/index.min.css">
 <script src="/xgplayer/index.min.js"></script>

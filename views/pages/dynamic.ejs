@@ -27,6 +27,11 @@
 
 <script>
 (function() {
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
   var isLoggedIn = <%= isLoggedIn ? 'true' : 'false' %>;
   if (!isLoggedIn) return;
 
@@ -153,7 +158,7 @@
       '<a href="/space/' + (author.mid || '') + '" class="dynamic-author-link">' +
       '<img class="dynamic-author-face" src="/image/proxy?url=' + encodeURIComponent(author.face || '') + '" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23999%22><circle cx=%2212%22 cy=%228%22 r=%224%22/><path d=%22M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2%22/></svg>\'">' +
       '<div class="dynamic-author-info">' +
-      '<span class="dynamic-author-name" style="color:' + (author.vip && author.vip.nickname_color ? author.vip.nickname_color : 'inherit') + '">' + (author.name || '匿名用户') + '</span>' +
+      '<span class="dynamic-author-name" style="color:' + (author.vip && author.vip.nickname_color ? author.vip.nickname_color : 'inherit') + '">' + escapeHtml(author.name || '匿名用户') + '</span>' +
       '<span class="dynamic-author-time">' + (author.pub_time || '') + '</span>' +
       '</div>' +
       '</a>' +
@@ -169,14 +174,14 @@
         (archive.duration_text ? '<span class="dynamic-video-duration">' + archive.duration_text + '</span>' : '') +
         '</div>' +
         '<div class="dynamic-video-info">' +
-        '<div class="dynamic-video-title">' + (archive.title || '') + '</div>' +
+        '<div class="dynamic-video-title">' + escapeHtml(archive.title || '') + '</div>' +
         (archive.desc ? '<div class="dynamic-video-desc">' + truncateText(stripHtmlTags(archive.desc), 80) + '</div>' : '') +
         '</div>' +
         '</a>';
     } else if (dynamic.major && dynamic.major.opus) {
       var opus = dynamic.major.opus;
       contentHtml = '<div class="dynamic-opus">' +
-        (opus.title ? '<div class="dynamic-opus-title">' + opus.title + '</div>' : '') +
+        (opus.title ? '<div class="dynamic-opus-title">' + escapeHtml(opus.title) + '</div>' : '') +
         (opus.summary ? '<div class="dynamic-opus-summary">' + truncateText(opus.summary.text || '', 120) + '</div>' : '') +
         '</div>';
     } else if (dynamic.major && dynamic.major.ugc) {
@@ -186,13 +191,13 @@
         '<img src="/image/proxy?url=' + encodeURIComponent(ugc.cover || '') + '" onerror="this.style.display=\'none\'" loading="lazy">' +
         '</div>' +
         '<div class="dynamic-video-info">' +
-        '<div class="dynamic-video-title">' + (ugc.title || '') + '</div>' +
+        '<div class="dynamic-video-title">' + escapeHtml(ugc.title || '') + '</div>' +
         '</div>' +
         '</a>';
     }
 
     if (dynamic.desc && dynamic.desc.text) {
-      contentHtml = '<div class="dynamic-desc">' + truncateText(dynamic.desc.text, 200) + '</div>' + contentHtml;
+      contentHtml = '<div class="dynamic-desc">' + escapeHtml(truncateText(dynamic.desc.text, 200)) + '</div>' + contentHtml;
     }
 
     var statHtml = '<div class="dynamic-stat">';

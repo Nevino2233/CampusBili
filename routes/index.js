@@ -459,7 +459,8 @@ router.get('/video/:bvid', function(req, res, next) {
                 commentsData: commentsData || null,
                 tagsData: tagsData || [],
                 relatedFromApi: relatedFromApi,
-                layoutFullwidth: true
+                layoutFullwidth: true,
+                stylesheets: ['/xgplayer/index.min.css']
               });
             });
             return; // 提前返回，等搜索完成后再渲染
@@ -484,7 +485,8 @@ router.get('/video/:bvid', function(req, res, next) {
             commentsData: commentsData || null,
             tagsData: tagsData || [],
             relatedFromApi: relatedFromApi,
-            layoutFullwidth: true
+            layoutFullwidth: true,
+            stylesheets: ['/xgplayer/index.min.css']
           });
         }
       }

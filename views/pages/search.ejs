@@ -81,6 +81,7 @@
   <% if (searchResults && searchResults.length > 0) { %>
   <div class="video-grid search-result-grid">
     <% searchResults.forEach(function(result) { %>
+    <% if (!result.bvid) return; %>
     <% var _coverUrl = (result.pic || result.cover || ''); if (_coverUrl.indexOf('//') === 0 && _coverUrl.indexOf('http') !== 0) { _coverUrl = 'https:' + _coverUrl; } %>
     <a href="/video/<%= result.bvid %>" class="video-card search-result-card">
       <div class="video-cover search-cover">
@@ -98,22 +99,22 @@
             <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
               <path d="M4.5 3.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm8-9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM4 4v8m8-7v6"/>
             </svg>
-            <%= formatCount(result.play || result.stat && result.stat.view ? result.play || result.stat.view : 0) %>
+            <%= formatCount(result.play || (result.stat && result.stat.view) || 0) %>
           </span>
           <span class="cover-stat">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
               <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2.5 0a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-10a.5.5 0 0 0-.5-.5h-7z"/>
             </svg>
-            <%= formatCount(result.video_review || result.stat && result.stat.danmaku ? result.video_review || result.stat.danmaku : 0) %>
+            <%= formatCount(result.video_review || (result.stat && result.stat.danmaku) || 0) %>
           </span>
         </div>
       </div>
       <div class="video-info">
         <h3 class="video-title search-result-title"><%- typeof highlightKeyword !== 'undefined' ? highlightKeyword(result.title, keyword) : sanitizeTitle(result.title) %></h3>
         <div class="video-meta">
-          <span class="video-author"><%= result.author || result.owner && result.owner.name ? result.author || result.owner.name : '未知UP主' %></span>
+          <span class="video-author"><%= result.author || (result.owner && result.owner.name) || '未知UP主' %></span>
           <div class="video-stats">
-            <span><%= formatCount(result.play || result.stat && result.stat.view ? result.play || result.stat.view : 0) %> 播放</span>
+            <span><%= formatCount(result.play || (result.stat && result.stat.view) || 0) %> 播放</span>
           </div>
         </div>
       </div>

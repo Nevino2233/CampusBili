@@ -20,7 +20,7 @@
   <meta property="og:site_name" content="CampusBili">
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'><rect width='28' height='28' rx='6' fill='%23FB7299'/><path d='M8 10L14 7L20 10V18L14 21L8 18V10Z' fill='white' opacity='0.9'/><circle cx='14' cy='14' r='3' fill='%23FB7299'/></svg>">
-  <link rel="stylesheet" href="/css/style.css?v=2.2">
+  <link rel="stylesheet" href="/css/style.css?v=3.0">
   <% if (typeof stylesheets !== 'undefined') { %>
     <% stylesheets.forEach(function(sheet) { %>
       <link rel="stylesheet" href="<%= sheet %>">
@@ -222,7 +222,9 @@
   </div>
 
   <!-- 回到顶部按钮 -->
-  <button id="backToTop" class="back-to-top" title="返回顶部">↑</button>
+  <button id="backToTop" class="back-to-top" title="返回顶部" aria-label="返回顶部">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+  </button>
 
   <!-- Toast 通知容器 -->
   <div id="toastContainer" class="toast-container"></div>
