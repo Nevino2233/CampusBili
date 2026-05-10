@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Third-party reference docs
+bilibili-API-collect/
+
+# Runtime data
+data/sessions/
+logs/
+
+# IDE
+.vscode/
+.trae/
+.idea/
+
+# OS files
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Service daemon
+daemon/
+
+# Build
+dist/
+
+# Vendored libs (served from node_modules)
+public/vendor/
+public/libs/

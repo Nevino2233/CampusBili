@@ -1,0 +1,304 @@
+<div class="page-video-detail">
+  <% if (video) { %>
+  <div class="video-player-page">
+    <!-- 左侧主内容区 -->
+    <div class="video-main-content">
+      <!-- 视频播放器区域 -->
+      <div class="player-container">
+        <% if (playUrl) { %>
+        <div class="player-wrapper" id="playerWrapper">
+          <div id="xgPlayerContainer" class="xgplayer-container"></div>
+          <input type="hidden" id="videoPlayUrl" value="<%= playUrl %>">
+          <input type="hidden" id="videoPoster" value="<%= video.pic ? '/image/proxy?url=' + encodeURIComponent(video.pic) : '' %>">
+          <input type="hidden" id="videoBvid" value="<%= bvid %>">
+          <input type="hidden" id="videoCid" value="<%= cid %>">
+          <% if (video.pic) { var _posterUrl = video.pic; if (_posterUrl.indexOf('//') === 0 && _posterUrl.indexOf('http') !== 0) { _posterUrl = 'https:' + _posterUrl; } %>
+          <link rel="preload" as="image" href="/image/proxy?url=<%= encodeURIComponent(_posterUrl) %>">
+          <% } %>
+        </div>
+        <% } else { %>
+        <div class="player-placeholder" id="playerPlaceholder">
+          <div class="placeholder-icon">&#128249;</div>
+          <p>无法获取视频播放地址</p>
+          <% if (playErrorReason) { %>
+          <p class="placeholder-reason">原因：<%= playErrorReason %></p>
+          <% } %>
+          <p style="font-size: 14px; margin-top: 10px; opacity: 0.8;">
+            视频可能需要登录、已失效或有地区限制
+          </p>
+          <button class="retry-btn" onclick="retryLoadVideo()">
+            &#8635; 重新加载
+          </button>
+        </div>
+        <% } %>
+      </div>
+
+      <!-- 视频信息区域 -->
+      <div class="video-info-section">
+        <a href="javascript:history.back()" class="back-button" title="返回上一页">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          返回
+        </a>
+        <h1 class="video-title-main">
+          <%= video.title %>
+        </h1>
+        <% if (currentPage && pages && pages.length > 1 && currentPage.part && currentPage.part !== video.title) { %>
+        <div class="video-subtitle"><%= currentPage.part %></div>
+        <% } %>
+
+        <!-- 视频元数据：UP主 + 统计数据 -->
+        <div class="video-meta">
+          <div class="meta-left">
+            <% if (video.owner) { %>
+            <a href="/space/<%= video.owner.mid %>" class="uploader-link">
+              <img
+                src="/image/proxy?url=<%= encodeURIComponent(video.owner.face) %>"
+                alt="<%= video.owner.name %>"
+                class="uploader-avatar"
+                data-mid="<%= video.owner.mid %>"
+              >
+              <span class="uploader-name" data-mid="<%= video.owner.mid %>"><%= video.owner.name || '未知 UP 主' %></span>
+            </a>
+            <button class="follow-btn" title="关注 UP 主" onclick="event.preventDefault(); CampusBiliApp.showToast('关注功能开发中', 'info');">
+              + 关注
+            </button>
+            <% } %>
+          </div>
+
+          <div class="meta-right">
+            <% if (video.pubdate) { %>
+            <span class="publish-date">
+              <%= formatDate(video.pubdate) %>
+            </span>
+            <% } %>
+          </div>
+        </div>
+
+        <!-- 视频统计数据 -->
+        <div class="video-stats">
+          <% if (video.stat) { %>
+          <div class="stat-item" title="累计播放次数">
+            <span class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="stat-value"><%= formatCount(video.stat.view || 0) %></span>
+            <span class="stat-label">播放</span>
+          </div>
+          <div class="stat-item" title="弹幕总数">
+            <span class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+            <span class="stat-value"><%= formatCount(video.stat.danmaku || 0) %></span>
+            <span class="stat-label">弹幕</span>
+          </div>
+          <div class="stat-item" title="点赞数">
+            <span class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></span>
+            <span class="stat-value"><%= formatCount(video.stat.like || 0) %></span>
+            <span class="stat-label">点赞</span>
+          </div>
+          <div class="stat-item" title="投币数">
+            <span class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg></span>
+            <span class="stat-value"><%= formatCount(video.stat.coin || 0) %></span>
+            <span class="stat-label">投币</span>
+          </div>
+          <div class="stat-item" title="收藏数">
+            <span class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+            <span class="stat-value"><%= formatCount(video.stat.favorite || 0) %></span>
+            <span class="stat-label">收藏</span>
+          </div>
+          <div class="stat-item" title="分享次数">
+            <span class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
+            <span class="stat-value"><%= formatCount(video.stat.share || 0) %></span>
+            <span class="stat-label">分享</span>
+          </div>
+          <% } %>
+        </div>
+
+        <!-- 视频标签 -->
+        <% if (typeof tagsData !== 'undefined' && tagsData && tagsData.length > 0) { %>
+        <div class="video-tags">
+          <% tagsData.forEach(function(tag) { %>
+            <a href="/search?keyword=<%= encodeURIComponent(tag.tag_name) %>" class="tag-pill">
+              <%= tag.tag_name %>
+            </a>
+          <% }); %>
+        </div>
+        <% } %>
+
+        <!-- 视频简介 -->
+        <div class="video-description-section">
+          <div class="description-content" id="descriptionContent">
+            <%= stripHtmlTags(video.desc || '暂无简介') %>
+          </div>
+        </div>
+      </div>
+
+      <!-- 分P列表 -->
+      <% if (pages && pages.length > 1) { %>
+      <div class="episode-list-container">
+        <h3 class="section-title">选集 (<%= pages.length %>)</h3>
+        <div class="episode-list episode-scrollable" id="episodeList">
+          <% pages.forEach(function(page, index) { %>
+          <a
+            href="/video/<%= bvid %>?cid=<%= page.cid %>"
+            class="episode-item <%= page.cid === cid ? 'active' : '' %>"
+            data-cid="<%= page.cid %>"
+            data-part="<%= page.part %>"
+          >
+            <span class="episode-index">P<%= index + 1 %></span>
+            <span class="episode-title"><%= page.part %></span>
+            <span class="episode-duration"><%= formatDuration(page.duration) %></span>
+          </a>
+          <% }) %>
+        </div>
+      </div>
+      <% } %>
+
+      <!-- 评论区 -->
+      <section class="comments-section" id="commentsSection">
+        <div class="comments-header">
+          <h2 class="comments-title">评论 <span class="comments-count"><%= (commentsData && (commentsData.cursor || commentsData.page)) ? formatCount((commentsData.cursor && commentsData.cursor.all_count) || (commentsData.page && (commentsData.page.acount || commentsData.page.count)) || 0) : '0' %></span></h2>
+        </div>
+
+        <!-- 热评/置顶评论 -->
+        <%
+          var hotComments = [];
+          if (typeof commentsData !== 'undefined' && commentsData) {
+            if (commentsData.top_replies && commentsData.top_replies.length > 0) {
+              hotComments = commentsData.top_replies;
+            } else if (commentsData.hots && commentsData.hots.length > 0) {
+              hotComments = commentsData.hots;
+            }
+          }
+        %>
+        <% if (hotComments.length > 0) { %>
+        <div class="comments-hot">
+          <div class="hot-divider">—— 热门评论 ——</div>
+          <% hotComments.forEach(function(comment) { %>
+            <div class="comment-item comment-hot">
+              <img src="/image/proxy?url=<%= encodeURIComponent(comment.member.avatar) %>" alt="" class="comment-avatar">
+              <div class="comment-body">
+                  <div class="comment-user">
+                    <span class="comment-name" data-mid="<%= comment.member.mid %>"><%= comment.member.uname %></span>
+                    <% if (comment.member.vip && comment.member.vip.status === 1) { %><span class="vip-badge">大会员</span><% } %>
+                  </div>
+                  <div class="comment-content"><%= stripHtmlTags(comment.content.message) %></div>
+                  <div class="comment-meta">
+                    <span class="comment-time"><%= formatDate(comment.ctime) %></span>
+                    <span class="comment-like">&#128077; <%= formatCount(comment.like) %></span>
+                    <span class="comment-reply-count"><%= comment.rcount || 0 %> 条回复</span>
+                  </div>
+                </div>
+            </div>
+          <% }); %>
+        </div>
+        <% } %>
+
+        <!-- 普通评论 -->
+        <% if (typeof commentsData !== 'undefined' && commentsData && commentsData.replies && commentsData.replies.length > 0) { %>
+        <div class="comments-list">
+          <% commentsData.replies.forEach(function(comment) { %>
+            <div class="comment-item">
+              <img src="/image/proxy?url=<%= encodeURIComponent(comment.member.avatar) %>" alt="" class="comment-avatar">
+              <div class="comment-body">
+                  <div class="comment-user">
+                    <span class="comment-name" data-mid="<%= comment.member.mid %>"><%= comment.member.uname %></span>
+                    <% if (comment.member.vip && comment.member.vip.status === 1) { %><span class="vip-badge">大会员</span><% } %>
+                  </div>
+                  <div class="comment-content"><%= stripHtmlTags(comment.content.message) %></div>
+                  <div class="comment-meta">
+                    <span class="comment-time"><%= formatDate(comment.ctime) %></span>
+                    <span class="comment-like">&#128077; <%= formatCount(comment.like) %></span>
+                    <% if (comment.rcount > 0) { %><span class="comment-reply-toggle"> <%= comment.rcount %> 条回复 &#9662;</span><% } %>
+                  </div>
+                  <% if (comment.replies && comment.replies.length > 0) { %>
+                  <div class="comment-replies">
+                    <% comment.replies.forEach(function(reply) { %>
+                      <div class="comment-reply-item">
+                        <img src="/image/proxy?url=<%= encodeURIComponent(reply.member.avatar) %>" alt="" class="reply-avatar">
+                        <div class="reply-body">
+                          <span class="reply-name"><%= reply.member.uname %></span>:
+                          <span class="reply-content"><%= stripHtmlTags(reply.content.message) %></span>
+                        </div>
+                      </div>
+                    <% }); %>
+                  </div>
+                  <% } %>
+                </div>
+            </div>
+          <% }); %>
+        </div>
+        <% } else if (typeof commentsData === 'undefined' || !commentsData) { %>
+        <div class="comments-empty">加载评论中...</div>
+        <% } else { %>
+        <div class="comments-empty">暂无评论，来发表第一条吧~</div>
+        <% } %>
+      </section>
+    </div>
+
+    <!-- 右侧边栏 -->
+    <div class="video-sidebar">
+      <!-- 推荐视频列表（优先使用服务端搜索的相关推荐） -->
+      <div class="sidebar-card recommend-card">
+        <h3 class="card-title">相关推荐</h3>
+        <div class="recommend-list" id="recommendList">
+          <% if (recommendVideos && recommendVideos.length > 0) { %>
+            <% recommendVideos.forEach(function(video) { %>
+            <a href="/video/<%= video.bvid %>" class="recommend-item">
+              <div class="recommend-cover">
+                <img
+                  src="/image/proxy?url=<%= encodeURIComponent(video.pic || video.cover) %>"
+                  alt="<%= video.title %>"
+                  onerror="this.style.opacity='0.3';this.style.background='#1a1a2e';this.alt='图片加载失败';"
+                >
+              </div>
+              <div class="recommend-info">
+                <div class="recommend-title"><%= stripHtmlTags(video.title) %></div>
+                <div class="recommend-meta">
+                  <span><%= formatCount(video.play || (video.stat && video.stat.view) || 0) %> 播放</span>
+                  <span><%= video.author || (video.owner && video.owner.name) || '未知 UP 主' %></span>
+                </div>
+              </div>
+            </a>
+            <% }); %>
+            <button class="load-more-recommend-btn" id="loadMoreRecommendBtn" onclick="loadMoreRecommend()">
+              加载更多推荐
+            </button>
+          <% } else { %>
+          <div class="loading-placeholder">加载中...</div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% } else { %>
+  <div class="empty-state">
+    <div class="empty-state-icon">&#128249;</div>
+    <p class="empty-state-text">视频不存在或已被删除</p>
+    <p class="empty-state-hint">请检查视频链接是否正确</p>
+  </div>
+  <% } %>
+</div>
+
+<!-- 传递数据给前端 JavaScript -->
+<script type="text/javascript">
+  var _bvid = '<%= bvid %>';
+  var _cid = <%= cid %>;
+  var _pages = <%- JSON.stringify(pages || []).replace(/<\//g, '<\\/') %>;
+  var _qualityList = <%- JSON.stringify((qualityList || []).map(function(q) { return Object.assign({}, q, { url: encodeURIComponent(q.url) }); })).replace(/<\//g, '<\\/') %>;
+  var _hasVideo = <%= playUrl ? 'true' : 'false' %>;
+
+  window.videoPageData = {
+    bvid: _bvid,
+    cid: _cid,
+    pages: _pages,
+    qualityList: _qualityList,
+    hasVideo: _hasVideo === 'true'
+  };
+
+  function retryLoadVideo() {
+    var placeholder = document.getElementById('playerPlaceholder');
+    if (placeholder) {
+      placeholder.innerHTML = '<div class="loader-spinner"></div><p>正在重新加载...</p>';
+    }
+    window.location.reload();
+  }
+</script>
+
+<script src="/xgplayer/index.min.js"></script>

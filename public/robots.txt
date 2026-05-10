@@ -1,0 +1,15 @@
+# CampusBili - robots.txt
+# https://www.robotstxt.org/
+
+User-agent: *
+Allow: /
+
+# 禁止爬取的路径（如果有）
+Disallow: /api/
+Disallow: /image/
+
+# 站点地图（如果有的话）
+# Sitemap: https://yourdomain.com/sitemap.xml
+
+# 爬取延迟（可选，单位：秒）
+Crawl-delay: 1

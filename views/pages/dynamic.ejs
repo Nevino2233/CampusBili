@@ -1,0 +1,232 @@
+<div class="page-dynamic">
+  <div class="dynamic-container">
+    <div class="dynamic-tabs" id="dynamicTabs">
+      <button class="dynamic-tab active" data-type="all">全部动态</button>
+    </div>
+
+    <div class="dynamic-list" id="dynamicList">
+      <% if (!isLoggedIn) { %>
+      <div class="dynamic-login-prompt">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <p>登录后查看关注UP主的动态</p>
+        <a href="/auth/login" class="dynamic-login-btn">立即登录</a>
+      </div>
+      <% } else { %>
+      <div class="dynamic-loading" id="dynamicLoading">
+        <div class="loader-spinner"></div>
+        <p>加载动态中...</p>
+      </div>
+      <% } %>
+    </div>
+
+    <div class="dynamic-load-more" id="dynamicLoadMore" style="display:none;">
+      <button class="load-more-btn" id="loadMoreBtn">加载更多</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  var isLoggedIn = <%= isLoggedIn ? 'true' : 'false' %>;
+  if (!isLoggedIn) return;
+
+  var currentType = 'all';
+  var currentOffset = '';
+  var isLoading = false;
+  var hasMore = true;
+
+  var listEl = document.getElementById('dynamicList');
+  var loadingEl = document.getElementById('dynamicLoading');
+  var loadMoreEl = document.getElementById('dynamicLoadMore');
+  var loadMoreBtn = document.getElementById('loadMoreBtn');
+  var tabsEl = document.getElementById('dynamicTabs');
+
+  tabsEl.addEventListener('click', function(e) {
+    var tab = e.target.closest('.dynamic-tab');
+    if (!tab || isLoading) return;
+
+    var type = tab.getAttribute('data-type');
+    if (type === currentType) return;
+
+    var tabs = tabsEl.querySelectorAll('.dynamic-tab');
+    for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+    tab.classList.add('active');
+
+    currentType = type;
+    currentOffset = '';
+    hasMore = true;
+    listEl.innerHTML = '';
+    loadMoreEl.style.display = 'none';
+    loadDynamics();
+  });
+
+  loadMoreBtn.addEventListener('click', function() {
+    if (!isLoading && hasMore) loadDynamics();
+  });
+
+  function loadDynamics() {
+    if (isLoading || !hasMore) return;
+    isLoading = true;
+    loadMoreBtn.textContent = '加载中...';
+
+    var url = '/api/dynamic?type=' + encodeURIComponent(currentType);
+    if (currentOffset) url += '&offset=' + encodeURIComponent(currentOffset);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.timeout = 10000;
+
+    xhr.onload = function() {
+      isLoading = false;
+      loadMoreBtn.textContent = '加载更多';
+
+      if (xhr.status === 401) {
+        listEl.innerHTML = '<div class="dynamic-login-prompt"><p>登录已过期，请重新登录</p><a href="/auth/login" class="dynamic-login-btn">重新登录</a></div>';
+        loadMoreEl.style.display = 'none';
+        return;
+      }
+
+      try {
+        var data = JSON.parse(xhr.responseText);
+        if (data.code === 0 && data.data) {
+          renderDynamics(data.data);
+          hasMore = data.data.has_more;
+          currentOffset = data.data.offset || '';
+          loadMoreEl.style.display = hasMore ? 'block' : 'none';
+        } else {
+          if (!currentOffset) {
+            listEl.innerHTML = '<div class="dynamic-empty"><p>暂无动态内容</p></div>';
+          }
+          loadMoreEl.style.display = 'none';
+        }
+      } catch (e) {
+        if (!currentOffset) {
+          listEl.innerHTML = '<div class="dynamic-empty"><p>加载失败，请刷新重试</p></div>';
+        }
+      }
+
+      if (loadingEl) loadingEl.style.display = 'none';
+    };
+
+    xhr.onerror = function() {
+      isLoading = false;
+      loadMoreBtn.textContent = '加载更多';
+      if (!currentOffset) {
+        listEl.innerHTML = '<div class="dynamic-empty"><p>网络错误，请刷新重试</p></div>';
+      }
+      if (loadingEl) loadingEl.style.display = 'none';
+    };
+
+    xhr.send();
+  }
+
+  function renderDynamics(data) {
+    var items = data.items || [];
+    var fragment = document.createDocumentFragment();
+
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      if (!item.visible) continue;
+
+      var card = createDynamicCard(item);
+      if (card) fragment.appendChild(card);
+    }
+
+    if (fragment.childNodes.length === 0 && !currentOffset) {
+      listEl.innerHTML = '<div class="dynamic-empty"><p>暂无动态内容</p></div>';
+      return;
+    }
+
+    listEl.appendChild(fragment);
+  }
+
+  function createDynamicCard(item) {
+    var modules = item.modules || {};
+    var author = modules.module_author || {};
+    var dynamic = modules.module_dynamic || {};
+    var stat = modules.module_stat || {};
+
+    var card = document.createElement('div');
+    card.className = 'dynamic-card';
+
+    var authorHtml = '<div class="dynamic-author">' +
+      '<a href="/space/' + (author.mid || '') + '" class="dynamic-author-link">' +
+      '<img class="dynamic-author-face" src="/image/proxy?url=' + encodeURIComponent(author.face || '') + '" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23999%22><circle cx=%2212%22 cy=%228%22 r=%224%22/><path d=%22M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2%22/></svg>\'">' +
+      '<div class="dynamic-author-info">' +
+      '<span class="dynamic-author-name" style="color:' + (author.vip && author.vip.nickname_color ? author.vip.nickname_color : 'inherit') + '">' + escapeHtml(author.name || '匿名用户') + '</span>' +
+      '<span class="dynamic-author-time">' + (author.pub_time || '') + '</span>' +
+      '</div>' +
+      '</a>' +
+      '</div>';
+
+    var contentHtml = '';
+
+    if (dynamic.major && dynamic.major.archive) {
+      var archive = dynamic.major.archive;
+      contentHtml = '<a href="/video/' + (archive.bvid || '') + '" class="dynamic-video-card">' +
+        '<div class="dynamic-video-cover">' +
+        '<img src="/image/proxy?url=' + encodeURIComponent(archive.cover || '') + '" onerror="this.style.display=\'none\'" loading="lazy">' +
+        (archive.duration_text ? '<span class="dynamic-video-duration">' + archive.duration_text + '</span>' : '') +
+        '</div>' +
+        '<div class="dynamic-video-info">' +
+        '<div class="dynamic-video-title">' + escapeHtml(archive.title || '') + '</div>' +
+        (archive.desc ? '<div class="dynamic-video-desc">' + truncateText(stripHtmlTags(archive.desc), 80) + '</div>' : '') +
+        '</div>' +
+        '</a>';
+    } else if (dynamic.major && dynamic.major.opus) {
+      var opus = dynamic.major.opus;
+      contentHtml = '<div class="dynamic-opus">' +
+        (opus.title ? '<div class="dynamic-opus-title">' + escapeHtml(opus.title) + '</div>' : '') +
+        (opus.summary ? '<div class="dynamic-opus-summary">' + truncateText(opus.summary.text || '', 120) + '</div>' : '') +
+        '</div>';
+    } else if (dynamic.major && dynamic.major.ugc) {
+      var ugc = dynamic.major.ugc;
+      contentHtml = '<a href="/video/' + (ugc.bvid || '') + '" class="dynamic-video-card">' +
+        '<div class="dynamic-video-cover">' +
+        '<img src="/image/proxy?url=' + encodeURIComponent(ugc.cover || '') + '" onerror="this.style.display=\'none\'" loading="lazy">' +
+        '</div>' +
+        '<div class="dynamic-video-info">' +
+        '<div class="dynamic-video-title">' + escapeHtml(ugc.title || '') + '</div>' +
+        '</div>' +
+        '</a>';
+    }
+
+    if (dynamic.desc && dynamic.desc.text) {
+      contentHtml = '<div class="dynamic-desc">' + escapeHtml(truncateText(dynamic.desc.text, 200)) + '</div>' + contentHtml;
+    }
+
+    var statHtml = '<div class="dynamic-stat">';
+    if (stat.like) statHtml += '<span class="dynamic-stat-item">&#x2764; ' + formatNum(stat.like.count || 0) + '</span>';
+    if (stat.reply) statHtml += '<span class="dynamic-stat-item">&#x1F4AC; ' + formatNum(stat.reply.count || 0) + '</span>';
+    if (stat.forward) statHtml += '<span class="dynamic-stat-item">&#x1F504; ' + formatNum(stat.forward.count || 0) + '</span>';
+    statHtml += '</div>';
+
+    card.innerHTML = authorHtml + contentHtml + statHtml;
+    return card;
+  }
+
+  function truncateText(text, maxLen) {
+    if (!text) return '';
+    text = stripHtmlTags(text);
+    return text.length > maxLen ? text.substring(0, maxLen) + '...' : text;
+  }
+
+  function stripHtmlTags(html) {
+    var div = document.createElement('div');
+    div.innerHTML = html;
+    return div.textContent || div.innerText || '';
+  }
+
+  function formatNum(n) {
+    if (n >= 10000) return (n / 10000).toFixed(1) + '万';
+    return n;
+  }
+
+  loadDynamics();
+})();
+</script>

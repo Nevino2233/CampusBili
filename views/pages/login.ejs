@@ -1,0 +1,908 @@
+<div class="login-page">
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="login-brand">
+          <svg width="36" height="36" viewBox="0 0 28 28" fill="none">
+            <rect width="28" height="28" rx="6" fill="#FB7299"/>
+            <path d="M8 10L14 7L20 10V18L14 21L8 18V10Z" fill="white" opacity="0.9"/>
+            <circle cx="14" cy="14" r="3" fill="#FB7299"/>
+          </svg>
+        </div>
+        <h1 class="login-title">登录 CampusBili</h1>
+        <p class="login-subtitle">扫码、密码或短信验证码登录</p>
+      </div>
+
+      <div class="login-tabs" role="tablist" aria-label="登录方式">
+        <button class="login-tab active" data-tab="qrcode" onclick="switchLoginTab('qrcode')" role="tab" aria-selected="true" aria-controls="panel-qrcode">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/><rect x="18" y="14" width="3" height="3"/><rect x="14" y="18" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/></svg>
+          扫码登录
+        </button>
+        <button class="login-tab" data-tab="password" onclick="switchLoginTab('password')" role="tab" aria-selected="false" aria-controls="panel-password">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          密码登录
+        </button>
+        <button class="login-tab" data-tab="sms" onclick="switchLoginTab('sms')" role="tab" aria-selected="false" aria-controls="panel-sms">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          短信登录
+        </button>
+      </div>
+
+      <div class="login-panel active" id="panel-qrcode" role="tabpanel" aria-labelledby="tab-qrcode">
+        <div class="qrcode-wrapper">
+          <div class="qrcode-box" id="qrcodeBox">
+            <div class="qrcode-loading">
+              <div class="loader-spinner"></div>
+              <p>正在加载二维码...</p>
+            </div>
+          </div>
+          <div class="qrcode-status" id="qrcodeStatus">
+            <p class="qrcode-hint">请使用 <strong>哔哩哔哩手机客户端</strong> 扫描二维码登录</p>
+          </div>
+          <div class="qrcode-expired" id="qrcodeExpired" style="display:none;">
+            <div class="expired-overlay">
+              <p>二维码已失效</p>
+              <button class="btn-refresh-qr" onclick="refreshQRCode()">点击刷新</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-panel" id="panel-password" role="tabpanel" aria-labelledby="tab-password">
+        <form id="passwordForm" onsubmit="handlePasswordLogin(event)">
+          <div class="form-group">
+            <label class="form-label">账号</label>
+            <input type="text" class="form-input" id="pwd-username" placeholder="手机号 / 邮箱地址" autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label class="form-label">密码</label>
+            <div class="input-password-wrapper">
+              <input type="password" class="form-input" id="pwd-password" placeholder="请输入密码" autocomplete="current-password">
+              <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('pwd-password', this)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">人机验证</label>
+            <div class="captcha-trigger-wrapper">
+              <button type="button" class="btn-captcha" id="password-captcha-btn" onclick="triggerCaptcha('password')">点击进行人机验证</button>
+              <span class="captcha-status" id="password-captcha-status"></span>
+            </div>
+          </div>
+          <div class="form-error" id="pwd-error" style="display:none;"></div>
+          <button type="submit" class="btn-login" id="pwd-submit-btn">登录</button>
+        </form>
+      </div>
+
+      <div class="login-panel" id="panel-sms" role="tabpanel" aria-labelledby="tab-sms">
+        <form id="smsForm" onsubmit="handleSmsLogin(event)">
+          <div class="form-group">
+            <label class="form-label">国际冠字码</label>
+            <select class="form-select" id="sms-cid">
+              <option value="1">+86 中国大陆</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">手机号</label>
+            <input type="tel" class="form-input" id="sms-tel" placeholder="请输入手机号" autocomplete="tel">
+          </div>
+          <div class="form-group">
+            <label class="form-label">人机验证</label>
+            <div class="captcha-trigger-wrapper">
+              <button type="button" class="btn-captcha" id="sms-captcha-btn" onclick="triggerCaptcha('sms')">点击进行人机验证</button>
+              <span class="captcha-status" id="sms-captcha-status"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">短信验证码</label>
+            <div class="sms-code-wrapper">
+              <input type="text" class="form-input" id="sms-code" placeholder="请输入验证码" maxlength="6" autocomplete="one-time-code">
+              <button type="button" class="btn-send-sms" id="btn-send-sms" onclick="handleSendSms()">发送验证码</button>
+            </div>
+          </div>
+          <div class="form-error" id="sms-error" style="display:none;"></div>
+          <button type="submit" class="btn-login" id="sms-submit-btn">登录</button>
+        </form>
+      </div>
+
+      <div class="login-panel" id="panel-risk" style="display:none;">
+        <div class="risk-verify-container">
+          <div class="risk-verify-header">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-warning)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <h3 class="risk-verify-title">安全验证</h3>
+            <p class="risk-verify-desc" id="risk-message">本次登录环境存在风险，需使用手机号进行验证</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label">人机验证</label>
+            <div class="captcha-trigger-wrapper">
+              <button type="button" class="btn-captcha" id="risk-captcha-btn" onclick="triggerRiskCaptcha()">点击进行人机验证</button>
+              <span class="captcha-status" id="risk-captcha-status"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">短信验证码</label>
+            <div class="sms-code-wrapper">
+              <input type="text" class="form-input" id="risk-code" placeholder="请输入验证码" maxlength="6">
+              <button type="button" class="btn-send-sms" id="btn-risk-sms" onclick="handleRiskSendSms()">发送验证码</button>
+            </div>
+          </div>
+          <div class="form-error" id="risk-error" style="display:none;"></div>
+          <button type="button" class="btn-login" id="risk-submit-btn" onclick="handleRiskVerify()">验证并登录</button>
+          <button type="button" class="btn-back-login" onclick="backToLogin()">返回重新登录</button>
+        </div>
+      </div>
+
+      <div class="login-footer">
+        <p>登录即代表同意 <a href="javascript:void(0)">用户协议</a> 和 <a href="javascript:void(0)">隐私政策</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/qrcode.min.js"></script>
+<script>
+(function() {
+  function getCookie(name) {
+    var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : '';
+  }
+
+  function setDeviceId(id) {
+    if (!id) return;
+    currentDeviceId = id;
+    try { localStorage.setItem('device_id', id); } catch(e) {}
+    if (!getCookie('device_id')) {
+      document.cookie = 'device_id=' + id + '; path=/; max-age=' + (365 * 24 * 60 * 60);
+    }
+  }
+
+  var currentTab = 'qrcode';
+  var qrPollTimer = null;
+  var qrCodeInstance = null;
+  var currentDeviceId = getCookie('device_id') || '';
+  if (!currentDeviceId) {
+    try { currentDeviceId = localStorage.getItem('device_id') || ''; } catch(e) {}
+  }
+  var geetestLoaded = false;
+  var geetestLoading = false;
+  var captchaInstances = {};
+  var captchaData = {
+    password: { token: '', challenge: '', validate: '', seccode: '', done: false },
+    sms: { token: '', challenge: '', validate: '', seccode: '', done: false },
+    risk: { recaptchaToken: '', geeGt: '', geeChallenge: '', geeValidate: '', geeSeccode: '', done: false }
+  };
+  var smsCaptchaKey = '';
+  var smsCountdown = 0;
+  var smsCountdownTimer = null;
+  var riskCountdown = 0;
+  var riskCountdownTimer = null;
+  var riskVerifyUrl = '';
+  var riskTmpCode = '';
+  var riskRequestId = '';
+  var riskCaptchaKey = '';
+
+  function loadGeetestSDK(callback) {
+    if (geetestLoaded) {
+      callback();
+      return;
+    }
+    if (geetestLoading) {
+      var checkInterval = setInterval(function() {
+        if (geetestLoaded) {
+          clearInterval(checkInterval);
+          callback();
+        }
+      }, 100);
+      return;
+    }
+    geetestLoading = true;
+    var script = document.createElement('script');
+    script.src = 'https://static.geetest.com/static/tools/gt.js';
+    script.onload = function() {
+      geetestLoaded = true;
+      geetestLoading = false;
+      callback();
+    };
+    script.onerror = function() {
+      geetestLoading = false;
+      callback(new Error('极验SDK加载失败'));
+    };
+    document.head.appendChild(script);
+  }
+
+  function createGeetestCaptcha(gt, challenge, type, callbacks) {
+    loadGeetestSDK(function(err) {
+      if (err) {
+        if (callbacks.onError) callbacks.onError(err);
+        return;
+      }
+      if (typeof window.initGeetest !== 'function') {
+        if (callbacks.onError) callbacks.onError(new Error('极验SDK未正确加载'));
+        return;
+      }
+      window.initGeetest({
+        gt: gt,
+        challenge: challenge,
+        offline: false,
+        new_captcha: true,
+        product: 'bind',
+        width: '100%'
+      }, function(captchaObj) {
+        captchaInstances[type] = captchaObj;
+
+        captchaObj.onReady(function() {
+          if (callbacks.onReady) callbacks.onReady();
+        });
+
+        captchaObj.onSuccess(function() {
+          var result = captchaObj.getValidate();
+          if (result) {
+            if (callbacks.onSuccess) callbacks.onSuccess(result);
+          }
+        });
+
+        captchaObj.onError(function() {
+          if (callbacks.onError) callbacks.onError(new Error('验证出错'));
+        });
+
+        captchaObj.onClose(function() {
+          if (callbacks.onClose) callbacks.onClose();
+        });
+
+        if (callbacks.onCreated) callbacks.onCreated(captchaObj);
+      });
+    });
+  }
+
+  window.switchLoginTab = function(tab) {
+    currentTab = tab;
+    var tabs = document.querySelectorAll('.login-tab');
+    var panels = document.querySelectorAll('.login-panel');
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tab') === tab);
+    }
+    for (var j = 0; j < panels.length; j++) {
+      var panelId = panels[j].id;
+      if (panelId === 'panel-risk') continue;
+      panels[j].classList.toggle('active', panelId === 'panel-' + tab);
+    }
+
+    if (tab === 'qrcode' && !qrCodeInstance) {
+      refreshQRCode();
+    }
+    if (tab !== 'qrcode' && qrPollTimer) {
+      clearInterval(qrPollTimer);
+      qrPollTimer = null;
+    }
+  };
+
+  window.refreshQRCode = function() {
+    var box = document.getElementById('qrcodeBox');
+    var expired = document.getElementById('qrcodeExpired');
+    var status = document.getElementById('qrcodeStatus');
+
+    box.innerHTML = '<div class="qrcode-loading"><div class="loader-spinner"></div><p>正在加载二维码...</p></div>';
+    expired.style.display = 'none';
+    status.innerHTML = '<p class="qrcode-hint">请使用 <strong>哔哩哔哩手机客户端</strong> 扫描二维码登录</p>';
+
+    if (qrPollTimer) { clearInterval(qrPollTimer); qrPollTimer = null; }
+    qrCodeInstance = null;
+
+    fetch('/auth/api/qrcode')
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.code !== 0 || !res.data) {
+          box.innerHTML = '<div class="qrcode-loading"><p style="color:var(--color-danger);">获取二维码失败，请刷新重试</p></div>';
+          return;
+        }
+
+        var url = res.data.url;
+        var key = res.data.qrcode_key;
+        if (res.data.device_id) {
+          setDeviceId(res.data.device_id);
+        }
+
+        box.innerHTML = '';
+        var qrDiv = document.createElement('div');
+        qrDiv.id = 'qrcodeCanvas';
+        box.appendChild(qrDiv);
+
+        try {
+          qrCodeInstance = new QRCode(qrDiv, {
+            text: url,
+            width: 200,
+            height: 200,
+            colorDark: '#18191c',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.M
+          });
+        } catch (e) {
+          box.innerHTML = '<div class="qrcode-loading"><p style="color:var(--color-danger);">二维码生成失败</p></div>';
+          return;
+        }
+
+        startQRPoll(key);
+      })
+      .catch(function() {
+        box.innerHTML = '<div class="qrcode-loading"><p style="color:var(--color-danger);">网络错误，请刷新重试</p></div>';
+      });
+  };
+
+  function startQRPoll(qrcodeKey) {
+    var startTime = Date.now();
+    var timeout = 170000;
+    var failCount = 0;
+
+    qrPollTimer = setInterval(function() {
+      if (Date.now() - startTime > timeout) {
+        clearInterval(qrPollTimer);
+        qrPollTimer = null;
+        showQRExpired();
+        return;
+      }
+
+      fetch('/auth/api/qrcode/poll?qrcode_key=' + encodeURIComponent(qrcodeKey) + '&device_id=' + encodeURIComponent(currentDeviceId))
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+          failCount = 0;
+
+          if (res.code !== 0) {
+            var statusEl = document.getElementById('qrcodeStatus');
+            statusEl.innerHTML = '<p class="qrcode-hint" style="color:var(--color-danger);">' + (res.message || '查询失败，请刷新重试') + '</p>';
+            return;
+          }
+
+          var statusEl = document.getElementById('qrcodeStatus');
+          if (res.status === 86101) {
+            statusEl.innerHTML = '<p class="qrcode-hint">请使用 <strong>哔哩哔哩手机客户端</strong> 扫描二维码登录</p>';
+          } else if (res.status === 86090) {
+            statusEl.innerHTML = '<p class="qrcode-hint qrcode-scanned">扫描成功，请在手机上确认登录</p>';
+          } else if (res.status === 86038) {
+            clearInterval(qrPollTimer);
+            qrPollTimer = null;
+            showQRExpired();
+          } else if (res.status === 0) {
+            clearInterval(qrPollTimer);
+            qrPollTimer = null;
+            if (res.device_id) {
+              setDeviceId(res.device_id);
+            }
+            statusEl.innerHTML = '<p class="qrcode-hint qrcode-success">登录成功！正在跳转...</p>';
+            setTimeout(function() {
+              window.location.href = '/auth/profile';
+            }, 800);
+          }
+        })
+        .catch(function(err) {
+          failCount++;
+          if (failCount >= 5) {
+            clearInterval(qrPollTimer);
+            qrPollTimer = null;
+            var statusEl = document.getElementById('qrcodeStatus');
+            statusEl.innerHTML = '<p class="qrcode-hint" style="color:var(--color-danger);">网络异常，请刷新页面重试</p>';
+          }
+        });
+    }, 3000);
+  }
+
+  function showQRExpired() {
+    var expired = document.getElementById('qrcodeExpired');
+    expired.style.display = 'flex';
+  }
+
+  window.triggerCaptcha = function(type) {
+    var btn = document.getElementById(type + '-captcha-btn');
+    var statusEl = document.getElementById(type + '-captcha-status');
+    btn.disabled = true;
+    btn.textContent = '加载中...';
+
+    fetch('/auth/api/captcha')
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.code !== 0 || !res.data) {
+          btn.disabled = false;
+          btn.textContent = '点击进行人机验证';
+          statusEl.textContent = '获取验证码失败';
+          statusEl.style.color = 'var(--color-danger)';
+          return;
+        }
+
+        var data = res.data;
+        var gt = data.geetest ? data.geetest.gt : '';
+        var challenge = data.geetest ? data.geetest.challenge : '';
+        var token = data.token || '';
+
+        captchaData[type].token = token;
+        captchaData[type].challenge = challenge;
+        captchaData[type].done = false;
+
+        createGeetestCaptcha(gt, challenge, type, {
+          onReady: function() {
+            btn.textContent = '请完成验证';
+            btn.disabled = false;
+          },
+          onSuccess: function(result) {
+            captchaData[type].challenge = result.geetest_challenge;
+            captchaData[type].validate = result.geetest_validate;
+            captchaData[type].seccode = result.geetest_seccode;
+            captchaData[type].done = true;
+
+            btn.textContent = '验证完成 \u2713';
+            btn.classList.add('captcha-done');
+            btn.disabled = false;
+            statusEl.textContent = '';
+          },
+          onError: function() {
+            btn.textContent = '验证出错，请重试';
+            btn.disabled = false;
+          },
+          onClose: function() {
+            if (!captchaData[type].done) {
+              btn.textContent = '点击进行人机验证';
+              btn.disabled = false;
+            }
+          },
+          onCreated: function(captchaObj) {
+            btn.onclick = function() {
+              if (!captchaData[type].done) {
+                captchaObj.verify();
+              }
+            };
+          }
+        });
+      })
+      .catch(function() {
+        btn.disabled = false;
+        btn.textContent = '点击进行人机验证';
+        statusEl.textContent = '网络错误';
+        statusEl.style.color = 'var(--color-danger)';
+      });
+  };
+
+  window.handlePasswordLogin = function(e) {
+    e.preventDefault();
+
+    var username = document.getElementById('pwd-username').value.trim();
+    var password = document.getElementById('pwd-password').value;
+    var errorEl = document.getElementById('pwd-error');
+    var submitBtn = document.getElementById('pwd-submit-btn');
+
+    errorEl.style.display = 'none';
+
+    if (!username) { showError(errorEl, '请输入账号'); return; }
+    if (!password) { showError(errorEl, '请输入密码'); return; }
+    if (!captchaData.password.done) { showError(errorEl, '请先完成人机验证'); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '登录中...';
+
+    fetch('/auth/api/login/password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+        token: captchaData.password.token,
+        challenge: captchaData.password.challenge,
+        validate: captchaData.password.validate,
+        seccode: captchaData.password.seccode,
+        device_id: currentDeviceId
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.code === 0) {
+        if (res.device_id) setDeviceId(res.device_id);
+        window.location.href = '/auth/profile';
+      } else if (res.code === 2) {
+        showRiskPanel(res.data && res.data.url ? res.data.url : '', res.message || '本次登录环境存在风险，需使用手机号进行验证');
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '登录';
+        showError(errorEl, res.message || '登录失败');
+        resetCaptcha('password');
+      }
+    })
+    .catch(function() {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '登录';
+      showError(errorEl, '网络错误，请重试');
+    });
+  };
+
+  function showRiskPanel(url, message) {
+    riskVerifyUrl = url || '';
+    try {
+      var urlObj = new URL(riskVerifyUrl);
+      riskTmpCode = urlObj.searchParams.get('tmp_token') || urlObj.searchParams.get('tmp_code') || '';
+      riskRequestId = urlObj.searchParams.get('request_id') || '';
+    } catch(e) {
+      riskTmpCode = '';
+      riskRequestId = '';
+    }
+
+    var riskMsg = document.getElementById('risk-message');
+    if (riskMsg) riskMsg.textContent = message;
+
+    var tabs = document.querySelectorAll('.login-tab');
+    for (var i = 0; i < tabs.length; i++) tabs[i].style.display = 'none';
+
+    var panels = document.querySelectorAll('.login-panel');
+    for (var j = 0; j < panels.length; j++) panels[j].classList.remove('active');
+
+    var riskPanel = document.getElementById('panel-risk');
+    riskPanel.style.display = 'block';
+    riskPanel.classList.add('active');
+  }
+
+  window.backToLogin = function() {
+    var tabs = document.querySelectorAll('.login-tab');
+    for (var i = 0; i < tabs.length; i++) tabs[i].style.display = '';
+
+    var riskPanel = document.getElementById('panel-risk');
+    riskPanel.style.display = 'none';
+    riskPanel.classList.remove('active');
+
+    captchaData.risk.done = false;
+    riskCaptchaKey = '';
+
+    switchLoginTab('password');
+  };
+
+  window.triggerRiskCaptcha = function() {
+    var btn = document.getElementById('risk-captcha-btn');
+    var statusEl = document.getElementById('risk-captcha-status');
+    btn.disabled = true;
+    btn.textContent = '加载中...';
+
+    fetch('/auth/api/risk/captcha', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.code !== 0 || !res.data) {
+        btn.disabled = false;
+        btn.textContent = '点击进行人机验证';
+        statusEl.textContent = '获取验证码失败';
+        statusEl.style.color = 'var(--color-danger)';
+        return;
+      }
+
+      var data = res.data;
+      captchaData.risk.recaptchaToken = data.recaptcha_token || '';
+      captchaData.risk.geeGt = data.gee_gt || '';
+      captchaData.risk.geeChallenge = data.gee_challenge || '';
+      captchaData.risk.done = false;
+
+      createGeetestCaptcha(data.gee_gt, data.gee_challenge, 'risk', {
+        onReady: function() {
+          btn.textContent = '请完成验证';
+          btn.disabled = false;
+        },
+        onSuccess: function(result) {
+          captchaData.risk.geeChallenge = result.geetest_challenge;
+          captchaData.risk.geeValidate = result.geetest_validate;
+          captchaData.risk.geeSeccode = result.geetest_seccode;
+          captchaData.risk.done = true;
+          btn.textContent = '验证完成 \u2713';
+          btn.classList.add('captcha-done');
+          btn.disabled = false;
+          statusEl.textContent = '';
+        },
+        onError: function() {
+          btn.textContent = '验证出错，请重试';
+          btn.disabled = false;
+        },
+        onClose: function() {
+          if (!captchaData.risk.done) {
+            btn.textContent = '点击进行人机验证';
+            btn.disabled = false;
+          }
+        },
+        onCreated: function(captchaObj) {
+          btn.onclick = function() {
+            if (!captchaData.risk.done) {
+              captchaObj.verify();
+            }
+          };
+        }
+      });
+    })
+    .catch(function() {
+      btn.disabled = false;
+      btn.textContent = '点击进行人机验证';
+      statusEl.textContent = '网络错误';
+      statusEl.style.color = 'var(--color-danger)';
+    });
+  };
+
+  window.handleRiskSendSms = function() {
+    var errorEl = document.getElementById('risk-error');
+    var btn = document.getElementById('btn-risk-sms');
+
+    if (!captchaData.risk.done) {
+      showError(errorEl, '请先完成人机验证');
+      return;
+    }
+    if (!riskTmpCode) {
+      showError(errorEl, '缺少验证参数，请返回重新登录');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = '发送中...';
+
+    fetch('/auth/api/risk/sms/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tmp_code: riskTmpCode,
+        recaptcha_token: captchaData.risk.recaptchaToken,
+        gee_challenge: captchaData.risk.geeChallenge,
+        gee_validate: captchaData.risk.geeValidate,
+        gee_seccode: captchaData.risk.geeSeccode
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.code === 0 && res.data) {
+        riskCaptchaKey = res.data.captcha_key || '';
+        startRiskCountdown();
+      } else {
+        btn.disabled = false;
+        btn.textContent = '发送验证码';
+        showError(errorEl, res.message || '发送失败');
+        captchaData.risk.done = false;
+        var capBtn = document.getElementById('risk-captcha-btn');
+        capBtn.textContent = '点击进行人机验证';
+        capBtn.classList.remove('captcha-done');
+      }
+    })
+    .catch(function() {
+      btn.disabled = false;
+      btn.textContent = '发送验证码';
+      showError(errorEl, '网络错误，请重试');
+    });
+  };
+
+  function startRiskCountdown() {
+    var btn = document.getElementById('btn-risk-sms');
+    riskCountdown = 60;
+    btn.disabled = true;
+    btn.textContent = riskCountdown + 's';
+    riskCountdownTimer = setInterval(function() {
+      riskCountdown--;
+      if (riskCountdown <= 0) {
+        clearInterval(riskCountdownTimer);
+        btn.disabled = false;
+        btn.textContent = '发送验证码';
+      } else {
+        btn.textContent = riskCountdown + 's';
+      }
+    }, 1000);
+  }
+
+  window.handleRiskVerify = function() {
+    var code = document.getElementById('risk-code').value.trim();
+    var errorEl = document.getElementById('risk-error');
+    var submitBtn = document.getElementById('risk-submit-btn');
+
+    errorEl.style.display = 'none';
+
+    if (!code) { showError(errorEl, '请输入验证码'); return; }
+    if (!riskCaptchaKey) { showError(errorEl, '请先发送验证码'); return; }
+    if (!riskTmpCode || !riskRequestId) { showError(errorEl, '缺少验证参数，请返回重新登录'); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '验证中...';
+
+    fetch('/auth/api/risk/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tmp_code: riskTmpCode,
+        captcha_key: riskCaptchaKey,
+        code: code,
+        request_id: riskRequestId,
+        device_id: currentDeviceId
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.code === 0) {
+        if (res.device_id) setDeviceId(res.device_id);
+        window.location.href = '/auth/profile';
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '验证并登录';
+        showError(errorEl, res.message || '验证失败');
+      }
+    })
+    .catch(function() {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '验证并登录';
+      showError(errorEl, '网络错误，请重试');
+    });
+  };
+
+  window.handleSendSms = function() {
+    var tel = document.getElementById('sms-tel').value.trim();
+    var cid = document.getElementById('sms-cid').value;
+    var errorEl = document.getElementById('sms-error');
+    var btn = document.getElementById('btn-send-sms');
+
+    if (!tel) { showError(errorEl, '请输入手机号'); return; }
+    if (!captchaData.sms.done) { showError(errorEl, '请先完成人机验证'); return; }
+
+    btn.disabled = true;
+    btn.textContent = '发送中...';
+
+    fetch('/auth/api/login/sms/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        cid: cid,
+        tel: tel,
+        token: captchaData.sms.token,
+        challenge: captchaData.sms.challenge,
+        validate: captchaData.sms.validate,
+        seccode: captchaData.sms.seccode
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.code === 0 && res.data) {
+        smsCaptchaKey = res.data.captcha_key;
+        startSmsCountdown();
+      } else {
+        btn.disabled = false;
+        btn.textContent = '发送验证码';
+        showError(errorEl, res.message || '发送失败');
+        resetCaptcha('sms');
+      }
+    })
+    .catch(function() {
+      btn.disabled = false;
+      btn.textContent = '发送验证码';
+      showError(errorEl, '网络错误，请重试');
+    });
+  };
+
+  function startSmsCountdown() {
+    var btn = document.getElementById('btn-send-sms');
+    smsCountdown = 60;
+    btn.disabled = true;
+    btn.textContent = smsCountdown + 's';
+    smsCountdownTimer = setInterval(function() {
+      smsCountdown--;
+      if (smsCountdown <= 0) {
+        clearInterval(smsCountdownTimer);
+        btn.disabled = false;
+        btn.textContent = '发送验证码';
+      } else {
+        btn.textContent = smsCountdown + 's';
+      }
+    }, 1000);
+  }
+
+  window.handleSmsLogin = function(e) {
+    e.preventDefault();
+
+    var tel = document.getElementById('sms-tel').value.trim();
+    var cid = document.getElementById('sms-cid').value;
+    var code = document.getElementById('sms-code').value.trim();
+    var errorEl = document.getElementById('sms-error');
+    var submitBtn = document.getElementById('sms-submit-btn');
+
+    errorEl.style.display = 'none';
+
+    if (!tel) { showError(errorEl, '请输入手机号'); return; }
+    if (!code) { showError(errorEl, '请输入验证码'); return; }
+    if (!smsCaptchaKey) { showError(errorEl, '请先发送验证码'); return; }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '登录中...';
+
+    fetch('/auth/api/login/sms/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        cid: cid,
+        tel: tel,
+        code: code,
+        captcha_key: smsCaptchaKey,
+        device_id: currentDeviceId
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.code === 0) {
+        if (res.device_id) setDeviceId(res.device_id);
+        window.location.href = '/auth/profile';
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '登录';
+        showError(errorEl, res.message || '登录失败');
+      }
+    })
+    .catch(function() {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '登录';
+      showError(errorEl, '网络错误，请重试');
+    });
+  };
+
+  function resetCaptcha(type) {
+    captchaData[type].done = false;
+    captchaData[type].validate = '';
+    captchaData[type].seccode = '';
+    var btn = document.getElementById(type + '-captcha-btn');
+    if (btn) {
+      btn.textContent = '点击进行人机验证';
+      btn.classList.remove('captcha-done');
+      btn.disabled = false;
+    }
+    if (captchaInstances[type]) {
+      try { captchaInstances[type].destroy(); } catch(e) {}
+      delete captchaInstances[type];
+    }
+  }
+
+  window.togglePasswordVisibility = function(inputId, btn) {
+    var input = document.getElementById(inputId);
+    if (input.type === 'password') {
+      input.type = 'text';
+      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+    } else {
+      input.type = 'password';
+      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    }
+  };
+
+  function showError(el, msg) {
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function loadCountryList() {
+    fetch('/auth/api/country/list')
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.code !== 0 || !res.data) return;
+        var select = document.getElementById('sms-cid');
+        if (!select) return;
+        select.innerHTML = '';
+        var common = res.data.common || [];
+        var others = res.data.others || [];
+        for (var i = 0; i < common.length; i++) {
+          var c = common[i];
+          var opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = '+' + c.country_id + ' ' + c.cname;
+          select.appendChild(opt);
+        }
+        if (others.length > 0) {
+          var optgroup = document.createElement('optgroup');
+          optgroup.label = '其他国家和地区';
+          for (var j = 0; j < others.length; j++) {
+            var o = others[j];
+            var opt2 = document.createElement('option');
+            opt2.value = o.id;
+            opt2.textContent = '+' + o.country_id + ' ' + o.cname;
+            optgroup.appendChild(opt2);
+          }
+          select.appendChild(optgroup);
+        }
+      })
+      .catch(function() {});
+  }
+
+  loadCountryList();
+
+  if (currentTab === 'qrcode') {
+    setTimeout(function() { refreshQRCode(); }, 300);
+  }
+})();
+</script>
