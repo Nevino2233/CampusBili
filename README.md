@@ -69,7 +69,7 @@ pnpm install
 pnpm start
 ```
 
-打开 `http://localhost:3003`，开始你的内网 B 站之旅 🎉
+打开 `http://localhost:8001`，开始你的内网 B 站之旅 🎉
 
 > Windows 用户也可以双击 `启动.bat` 一键启动
 
@@ -96,7 +96,7 @@ node uninstall-service.js  # 卸载服务
 │              ┌───────┴───────┐                │
 │              │  CampusBili   │                │
 │              │  代理服务器    │                │
-│              │  :3003        │                │
+│              │  :8001        │                │
 │              └───────┬───────┘                │
 │                      │                        │
 └──────────────────────┼────────────────────────┘
@@ -110,7 +110,7 @@ node uninstall-service.js  # 卸载服务
 
 1. 找一台能上外网的机器（你的电脑就行）
 2. 安装 Node.js，克隆并启动 CampusBili
-3. 告诉室友访问 `http://你的IP:3003`
+3. 告诉室友访问 `http://你的IP:8001`
 4. 🎉 全宿舍一起看 B 站
 
 ### 多设备登录
@@ -160,14 +160,14 @@ CampusBili/
 PORT=8080 pnpm start
 
 # 方法 2：改代码
-# 编辑 server.js: var PORT = process.env.PORT || 3003;
+# 编辑 server.js: var PORT = process.env.PORT || 8001;
 ```
 
 ### 环境变量
 
 | 变量名        | 说明   | 默认值           |
 | ---------- | ---- | ------------- |
-| `PORT`     | 服务端口 | `3003`        |
+| `PORT`     | 服务端口 | `8001`        |
 | `NODE_ENV` | 运行环境 | `development` |
 
 ### 会话数据

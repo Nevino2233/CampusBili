@@ -8,7 +8,7 @@ var svc = new Service({
   nodeOptions: ['--harmony', '--max_old_space_size=4096'],
   env: [
     { name: 'NODE_ENV', value: 'production' },
-    { name: 'PORT', value: '3003' }
+    { name: 'PORT', value: '8001' }
   ]
 });
 
@@ -19,7 +19,7 @@ svc.on('install', function() {
 
 svc.on('start', function() {
   console.log('[CampusBili] 服务已启动，正在运行中...');
-  console.log('[CampusBili] 访问地址: http://localhost:3003');
+  console.log('[CampusBili] 访问地址: http://localhost:8001');
 });
 
 svc.on('error', function(err) {
